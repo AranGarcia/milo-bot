@@ -1,0 +1,12 @@
+# Byte code
+__pycache__/
+
+# Editors and IDE
+.vscode/
+
+# Pyenv
+.python-version
+
+# Rasa
+models/
+results/
