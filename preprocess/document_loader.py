@@ -4,6 +4,7 @@ Preprocessing and data preparation class for the legal documents.
 
 # Standard library
 import pickle
+from typing import List
 
 # YAML
 from yaml import Loader, load
@@ -14,73 +15,68 @@ from legal_structures.legal_file import LegalFileStructure
 # from word_vectors import load_lemmas
 
 
-class Preprocessor:
-    """File preprocessor class.
+VALID_DOC_FORMATS = {"json", "yaml"}
 
-    Transforms and structures files in preparation for data loading of the legal files.
+
+def structurize_txt(fname: str, output_format: str = "json"):
+    """Structures a legal document in TXT format into a YAML with
+    structure.
     """
 
-    VALID_DOC_FORMATS = {"json", "yaml"}
+    if not fname.endswith(".txt"):
+        raise ValueError(f"file {fname} has invalid format.")
 
-    # @classmethod
-    # def load_data(cls):
-    #     """Loads all necessary data for Milo to work.
+    if output_format not in VALID_DOC_FORMATS:
+        raise ValueError(f"invalid output format {output_format}.")
 
-    #     This method prepares and loads the following data:
-    #     - word vectors:
-    #     """
-    #     cls.__load_clusters()
+    lfs = LegalFileStructure()
+    paragraphs = []
+    with open(fname) as input_file:
+        for line in input_file:
+            # Remove trailing whitespace.
+            line = line.strip()
 
-    @classmethod
-    def structurize_txt(cls, fname: str, output_format: str = "json"):
-        """Structures a legal document in TXT format into a YAML with structure."""
-
-        if not fname.endswith(".txt"):
-            raise ValueError(f"file {fname} has invalid format.")
-
-        if output_format not in cls.VALID_DOC_FORMATS:
-            raise ValueError(f"invalid output format {output_format}.")
-
-        lfs = LegalFileStructure()
-        paragraphs = []
-        with open(fname) as input_file:
-            for line in input_file:
-                # Remove trailing whitespace.
-                line = line.strip()
-
-                # Parse all paragraphs as a single item
-                if line != "":
-                    paragraphs.append(line)
-                else:
-                    text = "\n".join(paragraphs)
-                    paragraphs.clear()
-                    item = identify_item(text)
-                    if item:
-                        lfs.add_item(item)
-
-        fname_without_txt = fname[:fname.rfind(".txt")]
-        lfs.write_file(fname_without_txt, file_format=output_format)
-
-    @classmethod
-    def load_structured_legal_doc(cls, fname):
-        # First validate that the file is in a valid format
-        extension_format = fname[(fname.rfind(".") + 1) :]
-        if extension_format not in cls.VALID_DOC_FORMATS:
-            raise ValueError(f"invalid format {fname}.")
-
-        with open(fname) as input_file:
-            if extension_format == "json":
-                data = cls.__load_json(input_file)
+            # Parse all paragraphs as a single item
+            if line != "":
+                paragraphs.append(line)
             else:
-                data = cls.__load_yaml(input_file)
+                text = "\n".join(paragraphs)
+                paragraphs.clear()
+                item = identify_item(text)
+                if item:
+                    lfs.add_item(item)
 
-    @classmethod
-    def __load_json(fobj):
-        return pickle.load(fobj)
+    fname_without_txt = fname[:fname.rfind(".txt")]
+    return lfs.write_file(fname_without_txt, file_format=output_format)
 
-    @classmethod
-    def __load_yaml(fobj):
-        return load(fobj, Loader=Loader)
+
+def structurize_txt_list(flist: List[str], output_format: str = "json"):
+    return [structurize_txt(fitem) for fitem in flist]
+
+
+def load_structured_legal_doc(cls, fname):
+    # First validate that the file is in a valid format
+    extension_format = fname[(fname.rfind(".") + 1) :]
+    if extension_format not in cls.VALID_DOC_FORMATS:
+        raise ValueError(f"invalid format {fname}.")
+
+    with open(fname) as input_file:
+        if extension_format == "json":
+            data = __load_json(input_file)
+        elif extension_format == "yaml":
+            data = __load_yaml(input_file)
+        else:
+            raise ValueError(f"unknown extension <{extension_format}>")
+
+        # Iterate over data
+
+
+def __load_json(fobj):
+    return pickle.load(fobj)
+
+
+def __load_yaml(fobj):
+    return load(fobj, Loader=Loader)
 
     # @staticmethod
     # def __load_clusters(fname: str, k: int = 10_000):
@@ -90,6 +86,7 @@ class Preprocessor:
 
 
 if __name__ == "__main__":
+    """This is just for testing."""
     docs = [
         "/home/aran/projects/atl/shepard.docs/txt/ley-organica.txt",
         "/home/aran/projects/atl/shepard.docs/txt/reglamento-de-titulacion-profesional.txt",
@@ -97,6 +94,8 @@ if __name__ == "__main__":
         "/home/aran/projects/atl/shepard.docs/txt/reglamento-interno.txt",
     ]
 
-    results = []
-    for d in docs:
-        Preprocessor.structurize_txt(d)
+    print("Structuring text files.")
+    results = structurize_txt_list(docs)
+    print(f"Loading {len(results)} files into the database.")
+    for r in results:
+        pass

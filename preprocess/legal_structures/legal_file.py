@@ -14,7 +14,7 @@ class LegalFileStructure:
         self._current_item = None
         self._stack = []
 
-    def write_file(self, fname, file_format) -> None:
+    def write_file(self, fname, file_format) -> str:
         if file_format == "yaml":
             fname = f"{fname}.yaml"
             with open(fname, "w", encoding="utf-8") as f:
@@ -30,6 +30,8 @@ class LegalFileStructure:
                 json.dump(self.content, f, ensure_ascii=False)
         else:
             raise ValueError(f"Unrecognized format {file_format}.")
+
+        return fname
 
     def add_item(self, item: LegalDocItem) -> None:
         # if not isinstance(item, LegalDocItem):
