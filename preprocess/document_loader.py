@@ -3,18 +3,26 @@ Preprocessing and data preparation class for the legal documents.
 """
 
 # Standard library
-import pickle
+import json
+from os.path import basename
 from typing import List
 
-# YAML
-from yaml import Loader, load
+# External packaged
+from unidecode import unidecode
 
-# Preprocessing packages
+# from yaml import Loader, load
+
+
+# DB Acces
+import db
+
+# Legal structure
 from legal_structures.base import identify_item
 from legal_structures.legal_file import LegalFileStructure
+
 # from word_vectors import load_lemmas
 
-
+LEVELS = db.get_division_levels()
 VALID_DOC_FORMATS = {"json", "yaml"}
 
 
@@ -46,7 +54,7 @@ def structurize_txt(fname: str, output_format: str = "json"):
                 if item:
                     lfs.add_item(item)
 
-    fname_without_txt = fname[:fname.rfind(".txt")]
+    fname_without_txt = fname[: fname.rfind(".txt")]
     return lfs.write_file(fname_without_txt, file_format=output_format)
 
 
@@ -54,25 +62,47 @@ def structurize_txt_list(flist: List[str], output_format: str = "json"):
     return [structurize_txt(fitem) for fitem in flist]
 
 
-def load_structured_legal_doc(cls, fname):
+def iter_depth_document(obj, id_document):
+    lvl = obj.get("level", "").lower()
+    if lvl not in LEVELS:
+        raise ValueError(f"invalid document level: {lvl}")
+
+    for it in obj.get("items", []):
+        text = it.get("text")
+        enum = it.get("enum")
+
+        print(f"Inserting {lvl} {enum} in {id_document}")
+        db.insert_structural_division(
+            id_level=LEVELS[lvl],
+            id_document=id_document,
+            enumeration=enum,
+            text=text,
+        )
+
+        content = it.get("content")
+        if content:
+            iter_depth_document(content, id_document)
+
+
+def load_structured_legal_doc(fname):
     # First validate that the file is in a valid format
     extension_format = fname[(fname.rfind(".") + 1) :]
-    if extension_format not in cls.VALID_DOC_FORMATS:
+    if extension_format not in VALID_DOC_FORMATS:
         raise ValueError(f"invalid format {fname}.")
 
     with open(fname) as input_file:
         if extension_format == "json":
-            data = __load_json(input_file)
+            data = json.load(input_file)
         elif extension_format == "yaml":
-            data = __load_yaml(input_file)
+            raise NotImplementedError("YAML not yet integrated.")
         else:
             raise ValueError(f"unknown extension <{extension_format}>")
 
+        # Create Document instance in DB
+        id_document = db.create_legal_document(basename(fname))
+
         # Iterate over data
-
-
-def __load_json(fobj):
-    return pickle.load(fobj)
+        iter_depth_document(data, id_document)
 
 
 def __load_yaml(fobj):
@@ -98,4 +128,4 @@ if __name__ == "__main__":
     results = structurize_txt_list(docs)
     print(f"Loading {len(results)} files into the database.")
     for r in results:
-        pass
+        load_structured_legal_doc(r)
