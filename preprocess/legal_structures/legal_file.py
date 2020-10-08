@@ -2,7 +2,7 @@
 import json
 import yaml
 
-from .items import ItemType, LegalDocItem
+from .base import ItemType, LegalDocItem
 
 
 class LegalFileStructure:
@@ -18,12 +18,7 @@ class LegalFileStructure:
         if file_format == "yaml":
             fname = f"{fname}.yaml"
             with open(fname, "w", encoding="utf-8") as f:
-                yaml.dump(
-                    self.content,
-                    stream=f,
-                    encoding="utf-8",
-                    allow_unicode=True
-                )
+                yaml.dump(self.content, stream=f, encoding="utf-8", allow_unicode=True)
         elif file_format == "json":
             fname = f"{fname}.json"
             with open(fname, "w", encoding="utf-8") as f:
@@ -34,8 +29,8 @@ class LegalFileStructure:
         return fname
 
     def add_item(self, item: LegalDocItem) -> None:
-        # if not isinstance(item, LegalDocItem):
-        #     raise ValueError(f"invalid type {item}, expected {LegalDocItem}")
+        if not isinstance(item, LegalDocItem):
+            raise ValueError(f"invalid type {item}, expected {LegalDocItem}")
 
         self._last_item = self._current_item
         self._current_item = item
@@ -67,7 +62,7 @@ class LegalFileStructure:
 
     def _update(self):
         item_list = self.content["items"]
-        for i in range(len(self._stack) - 1):
+        for _ in range(len(self._stack) - 1):
             content = item_list[-1]["content"]
             if not content:
                 # An item will be expanded

@@ -71,13 +71,16 @@ def iter_depth_document(obj, id_document):
         text = it.get("text")
         enum = it.get("enum")
 
-        print(f"Inserting {lvl} {enum} in {id_document}")
+        # Create a legal document
         db.insert_structural_division(
             id_level=LEVELS[lvl],
             id_document=id_document,
             enumeration=enum,
             text=text,
         )
+
+        # Load the bag of words
+        
 
         content = it.get("content")
         if content:
@@ -104,15 +107,10 @@ def load_structured_legal_doc(fname):
         # Iterate over data
         iter_depth_document(data, id_document)
 
-
-def __load_yaml(fobj):
-    return load(fobj, Loader=Loader)
-
-    # @staticmethod
-    # def __load_clusters(fname: str, k: int = 10_000):
-    #     """Reads a file with lemmas and groups them into 10,000 new cluster centers."""
-    #     # First load lemmas
-    #     lemmas = load_lemmas(fname)
+# def __load_clusters(fname: str, k: int = 10_000):
+#     """Reads a file with lemmas and groups them into 10,000 new cluster centers."""
+#     # First load lemmas
+#     lemmas = load_lemmas(fname)
 
 
 if __name__ == "__main__":

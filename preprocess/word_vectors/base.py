@@ -21,4 +21,5 @@ def load_lemmas(fname: str) -> List[str]:
 
     return sorted(lemmas)
 
-def
+def lemmatize_word(w):
+    

@@ -24,6 +24,10 @@ def get_division_levels() -> Dict[str, str]:
 
 
 def insert_structural_division(id_level, id_document, enumeration, text):
+    if not isinstance(enumeration, int):
+        raise ValueError(f"enumeration must be an integer, got {type(enumeration)}")
+    if not isinstance(text, str):
+        raise ValueError(f"text must be string, got {type(enumeration)}")
     client = _get_client()
     db = client[DB_NAME]
     db["DivisionEstructural"].insert_one(
@@ -39,8 +43,7 @@ def insert_structural_division(id_level, id_document, enumeration, text):
 def create_legal_document(document_name):
     client = _get_client()
     db = client[DB_NAME]
-    return db["Documento"].insert_one(
-        {"nombre_documento": document_name}).inserted_id
+    return db["Documento"].insert_one({"nombre_documento": document_name}).inserted_id
 
 
 if __name__ == "__main__":

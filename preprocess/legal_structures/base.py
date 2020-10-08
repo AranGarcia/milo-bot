@@ -123,4 +123,4 @@ class LegalDocItem:
         if enumeration_string.isdecimal():
             return int(enumeration_string)
         else:
-            return ENUMERATION_LEMMAS[enumeration_string]
+            return int(ENUMERATION_LEMMAS[enumeration_string])
