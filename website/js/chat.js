@@ -10,8 +10,9 @@ window.onload = function () {
 }
 
 // Constants
-const URL = "http://localhost:5005/model/parse/";
+const URL = "http://localhost:5005/webhooks/rest/webhook";
 const Http = new XMLHttpRequest();
+Http.withCredentials = true;
 
 
 // Date format constant variables
@@ -74,9 +75,12 @@ function createContainer(textInput) {
 
 function sendRequest(text) {
     Http.open("POST", URL);
-    Http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    Http.send(JSON.stringify({ "text": text}));
-    Http.onreadystatechange = (e) => {
-        console.log(Http.responseText)
-    }
+    Http.setRequestHeader("Content-Type", "application/json");
+    Http.setRequestHeader("Accept", "*/*");
+    Http.send(JSON.stringify({ "sender": "milo", "message": text }));
+    Http.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            console.log(this.responseText);
+        }
+    });
 }
