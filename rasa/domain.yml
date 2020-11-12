@@ -1,33 +1,46 @@
 version: "2.0"
 
+actions:
+  - action_extract_article
+
 intents:
   - greet
+  - extract_article
   - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
+
+entities:
+  - document
+  # Document levels
+  - articulo
+  - seccion
+  - capitulo
+  - titulo
+
+slots:
+  document:
+    type: categorical
+    values:
+    - reglamento general de estudios
+    - ley organica
+    - reglamento de titulación
+  articulo:
+    type: text
+  seccion:
+    type: text
+  capitulo:
+    type: text
+  titulo:
+    type: text
 
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
+  - text: "¡Hola! ¿En qué puedo ayudarte?"
 
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
-
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great, carry on!"
+  utter_ok:
+  - text: "Entendido."
 
   utter_goodbye:
-  - text: "Bye"
-
-  utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+  - text: "Adios."
 
 session_config:
   session_expiration_time: 60
