@@ -1,0 +1,23 @@
+version: '3.0'
+services:
+  rasa:
+    image: rasa/rasa:2.0.6-full
+    ports:
+      - 5005:5005
+    volumes:
+      - ./rasa:/app
+    command:
+      - run
+    
+  actions:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: milo-action
+    ports:
+      - 5055:5055
+
+networks:
+  default:
+    external:
+      name: interpreter_net
