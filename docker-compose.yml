@@ -6,8 +6,7 @@ services:
       - 5005:5005
     volumes:
       - ./rasa:/app
-    command:
-      - run
+    command: ["run", "--cors", "*"]
     
   actions:
     build:
