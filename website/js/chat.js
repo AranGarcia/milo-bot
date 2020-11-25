@@ -4,22 +4,47 @@ window.onload = function () {
         "keypress", function (event) {
             if (event.keyCode == 13) {
                 sendMessage();
+
+                // Auto scroll the chat area
+                var element = document.getElementById("chat-display-window");
+                var xh = element.scrollHeight;
+                element.scrollTo(0, xh);
             }
         }
     );
+
+    healthcheck();
 }
 
 // Constants
-const URL = "http://localhost:5005/webhooks/rest/webhook";
-const Http = new XMLHttpRequest();
-Http.withCredentials = true;
-
+const URL = "http://localhost:5005/";
 
 // Date format constant variables
 const options = {
     hour: '2-digit', minute: '2-digit'
 };
 const dateTimeFmt = new Intl.DateTimeFormat('es-MX', options).format;
+
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+async function healthcheck() {
+    await sleep(1000);
+    createContainer("Hola! Mi nombre es Milo. :)", true);
+    await sleep(1000);
+    axios.get(
+        URL,
+    ).then(function (response) {
+        if (response.status == 200) {
+            createContainer("Dime, ¿en qué puedo ayudarte?", true);
+        } else {
+            createContainer("Me gustaría ayudarte, pero no me siento bien. :("), true;
+        }
+    }).catch(function (error) {
+        createContainer("Lo lamento, por el momento no soy capaz de atender peticiones. :(", true);
+    });
+}
 
 /*
 sendMessage extracts the text from the input box, sends an HTTP request to the
@@ -28,8 +53,13 @@ server.
 */
 function sendMessage() {
     // First extract the text
-    element = document.getElementById("chat-input");
-    text = element.value;
+    var element = document.getElementById("chat-input");
+    var text = element.value.trim();
+
+    // Don't send empty input
+    if (text == "") {
+        return
+    }
 
     // Add a chat container
     createContainer(text);
@@ -42,7 +72,6 @@ function sendMessage() {
 
     // Send request to HTTP Server
     sendRequest(text);
-
 }
 
 function createContainer(textInput, response = false) {
@@ -81,17 +110,20 @@ function createContainer(textInput, response = false) {
 
 function sendRequest(text) {
     // TODO: Add this later
-    // Http.open("POST", URL);
-    // Http.setRequestHeader("Content-Type", "application/json");
-    // Http.setRequestHeader("Accept", "*/*");
-    // Http.send(JSON.stringify({ "sender": "milo", "message": text }));
-    // Http.addEventListener("readystatechange", function () {
-    //     if (this.readyState === 4 && this.status == 200) {
-    //         console.log(this.responseText);
-    //     } else {
-    //         console.log(this);
-    //     }
-    // });
-
-    createContainer("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", true)
+    axios.post(
+        URL + "webhooks/rest/webhook",
+        { "sender": "milo", "message": text },
+        {
+            "Content-Type": "application/json",
+            "Accept": "*/*"
+        }
+    ).then(function (response) {
+        if (response.status == 200) {
+            createContainer(response.data[0].text, true);
+        } else {
+            createContainer("Disculpa, ahorita no me siento bien :("), true;
+        }
+    }).catch(function (error) {
+        createContainer("Lo lamento, por el momento no soy capaz de atender peticiones. :(", true);
+    });
 }
