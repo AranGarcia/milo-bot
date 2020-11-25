@@ -45,12 +45,12 @@ function sendMessage() {
 
 }
 
-function createContainer(textInput) {
+function createContainer(textInput, response = false) {
     var messagesContainer = document.getElementById("chat-messages");
 
     // The chat bubble
     var newMessageDiv = document.createElement("div");
-    newMessageDiv.className = "chat-container"
+    newMessageDiv.classList.add("chat-container")
 
     // Avatar icon
     // XXX: Leave or delete it
@@ -67,6 +67,12 @@ function createContainer(textInput) {
     var timeSpan = document.createElement("span")
     timeSpan.innerHTML = dateTimeFmt(date);
 
+    if (response) {
+        newMessageDiv.classList.add("darker");
+        newMessageDiv.classList.add("chat-container-left");
+        timeSpan.classList.add("time-right");
+    }
+
     newMessageDiv.appendChild(textMessageP);
     // newMessageDiv.appendChild(avatarIcon);
     newMessageDiv.appendChild(timeSpan);
@@ -74,15 +80,18 @@ function createContainer(textInput) {
 }
 
 function sendRequest(text) {
-    Http.open("POST", URL);
-    Http.setRequestHeader("Content-Type", "application/json");
-    Http.setRequestHeader("Accept", "*/*");
-    Http.send(JSON.stringify({ "sender": "milo", "message": text }));
-    Http.addEventListener("readystatechange", function () {
-        if (this.readyState === 4 && this.status == 200) {
-            console.log(this.responseText);
-        } else {
-            console.log(this);
-        }
-    });
+    // TODO: Add this later
+    // Http.open("POST", URL);
+    // Http.setRequestHeader("Content-Type", "application/json");
+    // Http.setRequestHeader("Accept", "*/*");
+    // Http.send(JSON.stringify({ "sender": "milo", "message": text }));
+    // Http.addEventListener("readystatechange", function () {
+    //     if (this.readyState === 4 && this.status == 200) {
+    //         console.log(this.responseText);
+    //     } else {
+    //         console.log(this);
+    //     }
+    // });
+
+    createContainer("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", true)
 }
