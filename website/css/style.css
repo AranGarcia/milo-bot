@@ -37,11 +37,16 @@ textarea {
 /* Chat containers */
 
 #chat-display-window {
-    height: 75%;
+    height: 87%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: #a3a2ac;
 }
 
 #chat-input-window{
-    height: 20%;
+    height: 13%;
 }
 
 .chat-container {

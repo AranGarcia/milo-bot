@@ -79,8 +79,10 @@ function sendRequest(text) {
     Http.setRequestHeader("Accept", "*/*");
     Http.send(JSON.stringify({ "sender": "milo", "message": text }));
     Http.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) {
+        if (this.readyState === 4 && this.status == 200) {
             console.log(this.responseText);
+        } else {
+            console.log(this);
         }
     });
 }

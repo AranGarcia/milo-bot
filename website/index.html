@@ -25,14 +25,13 @@
 
         <!-- Text input area -->
         <section class="overflow-auto" id="chat-input-window">
-            <div class="input-group" style="height: 100%;">
+            <div class="input-group" style="height: 100%; flex-wrap: wrap;">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1"></span>
                     </div>
-                    <input id="chat-input" type="text" class="form-control"
-                        placeholder="Introduce tu mensaje aqu&iacute;." aria-describedby="basic-addon1"
-                        style="height: 100%;">
+                    <textarea id="chat-input" type="text" class="form-control"
+                        placeholder="Introduce tu mensaje aqu&iacute;." aria-describedby="basic-addon1"></textarea>
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button" id="button-addon2"
                             onclick="sendMessage()">Enviar</button>
@@ -41,8 +40,8 @@
             </div>
         </section>
 
-        <footer><a target="_blank" href="https://icons8.com/icons/set/bot">Bot icon</a> icon by <a target="_blank"
-                href="https://icons8.com">Icons8</a></footer>
+        <!-- <footer><a target="_blank" href="https://icons8.com/icons/set/bot">Bot icon</a> icon by <a target="_blank"
+                href="https://icons8.com">Icons8</a></footer> -->
 
         <!-- Bootstrap stuff -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
