@@ -1,58 +1,55 @@
 # Milo
 
-A legal information assistant bot for ESCOM. 🤖
+Chatbot para extraccion de documentos normativos para ESCOM. 🤖
 
-## Requirements
+##  Tabla de Contenido <!-- omit in toc -->
 
-It is very important to use **Python 3.6.8** due to a strict dependency with Rasa's own dependencies. This may be done using [pyenv](https://github.com/pyenv/pyenv)
+- [Milo](#milo)
+  - [Instalación](#instalación)
+    - [Requerimientos y Dependencias](#requerimientos-y-dependencias)
+    - [Entrenando el modelo](#entrenando-el-modelo)
+    - [Preparando el contenedor](#preparando-el-contenedor)
+  - [Ejecutando el servicio](#ejecutando-el-servicio)
 
 
-## Installation
+## Instalación
 
-It is highly recommended to use a virtual environment
+### Requerimientos y Dependencias
+
+Es muy importante usar la version **3.6.8** debido a una dependencia estricta con las propias dependencias de Rasa. Esto se puede hacer utilizando [pyenv](https://github.com/pyenv/pyenv).
 
 ```sh
-# Activate the virtual environment
+# Se recomienda utilizar un entorno virtual.
 source $VENV_PATH/bin/activate
 
-# Upgrade pip
+# Actualizar pip
 pip install --upgrade pip
 
-# Install dependencies
+# Instalar dependencias
 pip install -r requirements.txt
-```
 
-### Installing the language model for Spanish
-
-```bash
+# Instalaer modelo lingüístico en español
 python -m spacy download es_core_news_md    
 ```
 
-### Training the model
+### Entrenando el modelo
 
-Next, Rasa needs to train the model.
+
 
 ```sh
 cd rasa
 rasa train
 ```
 
-## Running the bot
+### Preparando el contenedor
 
-```sh
-rasa run --cors "*"
+```bash
+docker-compose build
+docker network create interpreter_net
 ```
 
-## (Deprecated) way of running the bot
+## Ejecutando el servicio
 
-```sh
-# Run the HTTP server on http://localhost:5005
-rasa run -m models --enable-api --cors "*"
-```
-
-Action server
-
-```sh
-# Run the Action server http://localhost:5055
-rasa run actions
+```bash
+docker-compose up
 ```

@@ -42,5 +42,19 @@ class ActionExtractArticle(Action):
         tracker: Tracker,
         domain: Dict[Text, Any]
     ) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(text="Hold on, still haven't implemented this custom action.")
+        dispatcher.utter_message(text="¿Quieres extraer un artículo? Todavía no puedo hacer eso.")
+        return []
+
+
+class ActionSimilaritySearch(Action):
+    def name(self) -> Text:
+        return "action_similarity_search"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any]
+    ) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="¿Quieres realizar una consulta? Espera, que no tengo los documentos. :(")
         return []

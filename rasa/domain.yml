@@ -2,10 +2,12 @@ version: "2.0"
 
 actions:
   - action_extract_article
+  - action_similarity_search
 
 intents:
   - greet
   - extract_article
+  - similarity_search
   - goodbye
 
 entities:

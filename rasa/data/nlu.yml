@@ -26,6 +26,11 @@ nlu:
     - que dice el articulo [40](articulo) de la [reglamento de titulación profesional](document)
     - de que habla el articulo [2](articulo) del [ley organica](document)
 
+- intent: similarity_search
+  examples: |
+    - que articulos hablan acerca de esto
+    - en que partes se mencionan acera de otra cosa
+
 - regex: articulo
   examples: |
     - [0-9]
