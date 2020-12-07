@@ -40,9 +40,22 @@ class ActionExtractArticle(Action):
         self,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
-        domain: Dict[Text, Any]
+        domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(text="¿Quieres extraer un artículo? Todavía no puedo hacer eso.")
+        doc = tracker.get_slot("documento")
+        niv_est = tracker.get_slot("nivel_estructural")
+        niv = tracker.get_slot("nivel")
+
+        # TODO: Determine response the search level given the possible combinations of entities.
+
+        if doc is None:
+            response_text = "¿De qué documento?"
+        else:
+            response_text = (
+                f"Document: {doc}, {tracker.latest_message['entities']}---{domain}"
+            )
+
+        dispatcher.utter_message(text=response_text)
         return []
 
 
@@ -54,7 +67,9 @@ class ActionSimilaritySearch(Action):
         self,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
-        domain: Dict[Text, Any]
+        domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(text="¿Quieres realizar una consulta? Espera, que no tengo los documentos. :(")
+        dispatcher.utter_message(
+            text="¿Quieres realizar una consulta? Espera, que no tengo los documentos. :("
+        )
         return []

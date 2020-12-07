@@ -11,27 +11,25 @@ intents:
   - goodbye
 
 entities:
-  - document
-  # Document levels
-  - articulo
-  - seccion
-  - capitulo
-  - titulo
+  - documento
+  - nivel_estructural
+  - nivel
 
 slots:
-  document:
+  documento:
     type: categorical
     values:
     - reglamento general de estudios
     - ley organica
     - reglamento de titulación
-  articulo:
-    type: text
-  seccion:
-    type: text
-  capitulo:
-    type: text
-  titulo:
+  nivel_estructural:
+    type: categorical
+    values:
+      - titulo
+      - capitulo
+      - seccion
+      - articulo
+  nivel:
     type: text
 
 responses:
@@ -43,6 +41,9 @@ responses:
 
   utter_goodbye:
   - text: "Adios."
+
+  utter_similarity_search_result:
+  - text: "Iniciaré una búsqueda de tu consulta."
 
 session_config:
   session_expiration_time: 60

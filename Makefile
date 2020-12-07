@@ -7,3 +7,6 @@ train:
 		--data rasa/data \
 		--domain rasa/domain.yml \
 		--out rasa/models
+
+delmod:
+	rm -rf rasa/models/

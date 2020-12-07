@@ -1,6 +1,13 @@
 version: "2.0"
 
 nlu:
+- lookup: documento
+  examples: |
+    - reglamento interno
+    - reglamento general de estudios
+    - reglamento de titulacion profesional
+    - ley organica
+
 - intent: greet
   examples: |
     - hola
@@ -21,10 +28,22 @@ nlu:
 
 - intent: extract_article
   examples: |
-    - articulo [123](articulo) del [reglamento interno](document)
-    - que dice el articulo [1](articulo) del [reglamento general de estudios](document)
-    - que dice el articulo [40](articulo) de la [reglamento de titulación profesional](document)
-    - de que habla el articulo [2](articulo) del [ley organica](document)
+    - [titulo](nivel_estructural) [1](nivel) del [reglamento de titulacion](documento)
+    - [titulo](nivel_estructural) [2](nivel) de la [ley orgánica](documento)
+    - [titulo](nivel_estructural) [3](nivel) del [reglamento interno](documento)
+    - [titulo](nivel_estructural) [4](nivel) del [reglamento general de estudios](documento)
+    - [capitulo](nivel_estructural) [1](nivel) del [reglamento de titulación](documento)
+    - [capítulo](nivel_estructural) [2](nivel) de la [ley orgánica](documento)
+    - [capítulo](nivel_estructural) [3](nivel) del [reglamento interno](documento)
+    - [capítulo](nivel_estructural) [4](nivel) del [reglamento general de estudios](documento)
+    - [sección](nivel_estructural) [1](nivel) del [reglamento de titulación](documento)
+    - [sección](nivel_estructural) [2](nivel) de la [ley orgánica](documento)
+    - [sección](nivel_estructural) [3](nivel) del [reglamento interno](documento)
+    - [sección](nivel_estructural) [4](nivel) del [reglamento general de estudios](documento)
+    - [articulo](nivel_estructural) [123](nivel) del [reglamento interno](documento)
+    - [articulo](nivel_estructural) [1](nivel) del [reglamento general de estudios](documento)
+    - [articulo](nivel_estructural) [40](nivel) de la [reglamento de titulacion profesional](documento)
+    - [articulo](nivel_estructural) [2](nivel) del [ley organica](documento)
 
 - intent: similarity_search
   examples: |
