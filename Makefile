@@ -1,11 +1,9 @@
-build:
-	docker build . --tag miloc
+build: train
+	docker-compose build
 
-run:
-	docker run -p 5005:5005 -d --name milo --rm -it miloc
-
-bash:
-	docker exec -it milo bash
-
-stop:
-	docker stop milo
+train:
+	rasa train \
+		--config rasa/config.yml \
+		--data rasa/data \
+		--domain rasa/domain.yml \
+		--out rasa/models
