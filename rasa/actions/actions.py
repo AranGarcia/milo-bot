@@ -14,16 +14,15 @@ DOCS = [
 
 
 def _str_sim(a, b):
-    return SequenceMatcher(None, a=a, b=b).ratio()
+    return SequenceMatcher(None, a, b).ratio()
 
 
-def identify_document(doc):
-    sims = [_str_sim(d) for d in DOCS]
-    val, idx = min((val, idx) for (idx, val) in enumerate(sims))
-    if val < 6.5:
+def identify_document(doc_name):
+    sims = [_str_sim(doc_name.lower(), d) for d in DOCS]
+    val, idx = max((val, idx) for (idx, val) in enumerate(sims))
+    if val < 0.65:
         return -1
-
-    return DOCS[idx]
+    return idx
 
 
 class ActionExtractArticle(Action):
@@ -40,17 +39,27 @@ class ActionExtractArticle(Action):
         niv_est = tracker.get_slot("nivel_estructural")
         niv = tracker.get_slot("nivel")
 
-        # TODO: Determine response the search level given the possible combinations of entities.
-
-        if doc is None:
-            response_text = "¿De qué documento?"
-        else:
-            response_text = (
-                f"Document: {doc}, {tracker.latest_message['entities']}---{domain}"
-            )
+        response_text = self.__generate_message(doc, niv_est, niv)
 
         dispatcher.utter_message(text=response_text)
         return []
+
+    @staticmethod
+    def __generate_message(doc, niv_est, niv):
+        # First determine the document
+        if doc is None:
+            return "¿De qué documento necesitas extraer informacion?"
+
+        doc_idx = identify_document(doc)
+        if doc_idx < 0:
+            return f'Perdon, pero el documento "{doc}" no lo conozco.'
+
+        doc_name = DOCS[doc_idx]
+
+        if niv_est is None or niv is None:
+            return f"Conozco el {doc_name}, ¿pero que parte quisieras?"
+
+        return f"DOCUMENTO: {doc_name.title()}, NIVEL: {niv_est.capitalize()}, ENUMERACION: {niv}"
 
 
 class ActionSimilaritySearch(Action):
