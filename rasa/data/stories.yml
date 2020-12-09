@@ -15,31 +15,10 @@ stories:
   steps:
   - intent: extract_article
   - action: action_extract_article
+  - action: action_reset_slots
 
 - story: Realizar búsqueda de conceptos similares
   steps:
   - intent: similarity_search
   - action: utter_similarity_search_result
   - action: action_similarity_search
-  
-
-
-  # - story: greet + similarity_search + goodbye
-  #   steps:
-  #     - intent: greet
-  #     - action: utter_greet
-  #     - intent: similarity_search
-  #     - action: action_similarity_search
-  #     - intent: goodbye
-  #     - action: utter_goodbye
-
-  # - story: greet + similarity_search + extract_article + goodbye
-  #   steps:
-  #     - intent: greet
-  #     - action: utter_greet
-  #     - intent: similarity_search
-  #     - action: action_similarity_search
-  #     - intent: extract_article
-  #     - action: action_extract_article
-  #     - intent: goodbye
-  #     - action: utter_goodbye

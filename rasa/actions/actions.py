@@ -2,6 +2,7 @@ from difflib import SequenceMatcher
 from typing import Any, Dict, List, Text
 
 from rasa_sdk import Action, Tracker
+from rasa_sdk.events import FollowupAction, SlotSet
 from rasa_sdk.executor import CollectingDispatcher
 
 
@@ -42,7 +43,7 @@ class ActionExtractArticle(Action):
         response_text = self.__generate_message(doc, niv_est, niv)
 
         dispatcher.utter_message(text=response_text)
-        return []
+        return [FollowupAction("action_reset_slots")]
 
     @staticmethod
     def __generate_message(doc, niv_est, niv):
@@ -57,7 +58,7 @@ class ActionExtractArticle(Action):
         doc_name = DOCS[doc_idx]
 
         if niv_est is None or niv is None:
-            return f"Conozco el {doc_name}, ¿pero que parte quisieras?"
+            return f"Conozco el {doc_name.title()}, ¿pero que parte quisieras?"
 
         return f"DOCUMENTO: {doc_name.title()}, NIVEL: {niv_est.capitalize()}, ENUMERACION: {niv}"
 
@@ -76,3 +77,20 @@ class ActionSimilaritySearch(Action):
             text="¿Quieres realizar una consulta? Espera, que no tengo los documentos. :("
         )
         return []
+
+
+class ResetSlots(Action):
+    def name(self):
+        return "action_reset_slots"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+        return [
+            SlotSet("documento", None),
+            SlotSet("nivel_estructural", None),
+            SlotSet("nivel", None),
+        ]

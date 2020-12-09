@@ -3,6 +3,7 @@ version: "2.0"
 actions:
   - action_extract_article
   - action_similarity_search
+  - action_reset_slots
 
 intents:
   - greet
@@ -18,12 +19,14 @@ entities:
 slots:
   documento:
     type: categorical
+    influence_conversation: false
     values:
     - reglamento general de estudios
     - ley organica
     - reglamento de titulación
   nivel_estructural:
     type: categorical
+    influence_conversation: false
     values:
       - titulo
       - capitulo
@@ -31,6 +34,7 @@ slots:
       - articulo
   nivel:
     type: text
+    influence_conversation: false
 
 responses:
   utter_greet:
@@ -47,4 +51,4 @@ responses:
 
 session_config:
   session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+  carry_over_slots_to_new_session: false
