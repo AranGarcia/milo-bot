@@ -1,4 +1,5 @@
 build: train
+	docker network create interpreter_net
 	docker-compose build
 
 train:
