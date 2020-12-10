@@ -1,9 +1,6 @@
 /* Knowledge Base DB init
  * This script defines the table attributes and loads catalog data.
  */
-CREATE DATABASE knowledgebase;
-USE knowledgebase;
-
 CREATE TABLE documento(
     nombre_division VARCHAR(50) PRIMARY KEY
 );
@@ -58,7 +55,7 @@ CREATE TABLE palabra_division_estructural(
 );
 
 -- The only catalog data to populate in the DB
-INSERT INTO documento VALUES
+INSERT INTO nivel_division VALUES
     ('capitulo'),
     ('seccion'),
     ('titulo'),

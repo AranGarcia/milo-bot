@@ -25,9 +25,9 @@ services:
       - 65432:5432
     restart: always
     environment:
-      - POSTGRES_DBNAME=knowledgebase
+      - POSTGRES_DB=knowledgebase
       - POSTGRES_USER=kbadmin
-      - POSTGRES_PASSWORD=knowledgebase
+      - POSTGRES_PASSWORD=kbadmin
 
 networks:
   default:
