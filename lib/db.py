@@ -32,3 +32,7 @@ def create_legal_document(doc_name):
         """,
         [doc_name],
     )
+
+
+def create_structural_division(id_level, id_document, enumeration, text):
+    pass
