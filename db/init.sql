@@ -2,7 +2,7 @@
  * This script defines the table attributes and loads catalog data.
  */
 CREATE TABLE documento(
-    nombre_division VARCHAR(50) PRIMARY KEY
+    nombre_documento VARCHAR(50) PRIMARY KEY
 );
 
 CREATE TABLE nivel_division(
@@ -18,7 +18,7 @@ CREATE TABLE division_estructural(
     vector       INTEGER[],
     CONSTRAINT fk_documento
         FOREIGN KEY(id_documento)
-        REFERENCES documento(nombre_division),
+        REFERENCES documento(nombre_documento),
     CONSTRAINT fk_nivel_division
         FOREIGN KEY(id_nivel)
         REFERENCES nivel_division(nombre_division)
