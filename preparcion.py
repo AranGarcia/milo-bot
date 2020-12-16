@@ -3,7 +3,7 @@
 Script de preparacion de documentos normativos
 
 Transforma los documentos en formato TXT a un formato estructurado JSON. Este script itera
-sobre un directorio y 
+sobre los archivos de un directorio, transforma el formato y los escribe un directorio destino.
 """
 
 import argparse
