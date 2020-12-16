@@ -1,0 +1,34 @@
+# PostgreSQL
+import psycopg2
+
+
+class PostgresClient:
+    con = None
+
+    @classmethod
+    def __initiate_client(cls):
+        cls.con = psycopg2.connect(
+            dbname="knowledgebase",
+            user="kbadmin",
+            password="kbadmin",
+            host="localhost",
+            port=65432,
+        )
+
+    @classmethod
+    def query(cls, str_query, args=[]):
+        cls.__initiate_client()
+        cur = cls.con.cursor()
+        cur.execute(str_query, args)
+        cls.con.commit()
+        cls.con.close()
+
+
+def create_legal_document(doc_name):
+    PostgresClient.query(
+        """
+        INSERT INTO documento
+        VALUES(%s);
+        """,
+        [doc_name],
+    )
