@@ -59,4 +59,4 @@ INSERT INTO nivel_division VALUES
     ('capitulo'),
     ('seccion'),
     ('titulo'),
-    ('artiuclo');
+    ('articulo');
