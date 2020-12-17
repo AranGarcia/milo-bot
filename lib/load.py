@@ -9,6 +9,7 @@ from lib import db
 
 
 def _iterar_divisiones_documento(data, id_documento):
+    lvl = data.get("level", "").lower()
     for it in data.get("items", []):
         text = it.get("text")
         enum = it.get("enum")
@@ -17,7 +18,7 @@ def _iterar_divisiones_documento(data, id_documento):
 
         # Load the document segment into the DB
         db.create_structural_division(
-            id_level='',
+            id_level=lvl,
             id_document=id_documento,
             enumeration=enum,
             text=text,

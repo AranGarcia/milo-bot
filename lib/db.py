@@ -35,4 +35,12 @@ def create_legal_document(doc_name):
 
 
 def create_structural_division(id_level, id_document, enumeration, text):
-    pass
+    PostgresClient.query(
+        """
+        INSERT INTO division_estructural(
+            id_nivel, id_documento, texto, numeracion
+        )
+        VALUES(%s,%s,%s,%s);
+        """,
+        [id_level, id_document, text, enumeration],
+    )
