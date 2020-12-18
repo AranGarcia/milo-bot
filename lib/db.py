@@ -44,3 +44,13 @@ def create_structural_division(id_level, id_document, enumeration, text):
         """,
         [id_level, id_document, text, enumeration],
     )
+
+
+def create_word_cluster(vector):
+    PostgresClient.query(
+        """
+        INSERT INTO cluster_palabra(vector)
+        VALUES(%s);
+        """,
+        ["{" + ",".join(str(v) for v in vector) + "}"],
+    )
