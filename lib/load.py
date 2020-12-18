@@ -17,18 +17,24 @@ CLUSTER_FILE = "docs/wv.npy"
 def _iterar_divisiones_documento(data, id_documento):
     lvl = data.get("level", "").lower()
     for it in data.get("items", []):
-        text = it.get("text")
+        texto = it.get("text")
         enum = it.get("enum")
 
-        # TODO: Vectorizar division estructural
+        # Crear representacion vectorizada del texto
+        texto_normalizado = nlputils.normalize_sentence(texto)
 
-        # Load the document segment into the DB
-        db.create_structural_division(
+        # Cargar la division estructural a la BD
+        indices = nlputils.Vectorizer.vectorize_text(texto_normalizado)
+        id_div_est = db.create_structural_division(
             id_level=lvl,
+            text=texto,
             id_document=id_documento,
             enumeration=enum,
-            text=text,
         )
+
+        # Asociar la division estructural al los clusters
+        for idx in indices:
+            db.create_structural_division_words(id_div_est, idx)
 
         content = it.get("content")
         if content:
@@ -64,6 +70,8 @@ def cargar_vectores(fname):
     print("Guardando instancias de cluster_palabra")
     for cluster in cc:
         db.create_word_cluster(cluster)
+
+    nlputils.Vectorizer.clusters = cc
 
 
 def cargar_documento(fname):

@@ -23,6 +23,16 @@ class PostgresClient:
         cls.con.commit()
         cls.con.close()
 
+    @classmethod
+    def query_with_result(cls, str_query, args=[]):
+        cls.__initiate_client()
+        cur = cls.con.cursor()
+        cur.execute(str_query, args)
+        res = cur.fetchone()[0]
+        cls.con.commit()
+        cls.con.close()
+        return res
+
 
 def create_legal_document(doc_name):
     PostgresClient.query(
@@ -35,14 +45,27 @@ def create_legal_document(doc_name):
 
 
 def create_structural_division(id_level, id_document, enumeration, text):
-    PostgresClient.query(
+    return PostgresClient.query_with_result(
         """
         INSERT INTO division_estructural(
             id_nivel, id_documento, texto, numeracion
         )
-        VALUES(%s,%s,%s,%s);
+        VALUES(%s,%s,%s,%s)
+        RETURNING id;
         """,
         [id_level, id_document, text, enumeration],
+    )
+
+
+def create_structural_division_words(id_str_div, id_cl_w):
+    PostgresClient.query(
+        """
+        INSERT INTO palabra_division_estructural(
+            id_division_estructural, id_cluster_palabra
+        )
+        VALUES(%s, %s)
+        """,
+        [id_str_div, id_cl_w],
     )
 
 
