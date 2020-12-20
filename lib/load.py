@@ -31,6 +31,10 @@ def _iterar_divisiones_documento(data, id_documento):
             id_document=id_documento,
             enumeration=enum,
         )
+        if id_div_est is None:
+            raise ValueError(
+                f"error al crear una division estructural:\n\tDocumento:{id_documento}\n\tNivel:{lvl}\n\tTexto:{texto}"
+            )
 
         # Asociar la division estructural al los clusters
         for idx in indices:

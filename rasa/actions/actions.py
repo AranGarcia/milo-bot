@@ -5,6 +5,8 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.events import FollowupAction, SlotSet
 from rasa_sdk.executor import CollectingDispatcher
 
+from lib.db import retrieve_structural_division
+
 
 DOCS = [
     "reglamento interno",
