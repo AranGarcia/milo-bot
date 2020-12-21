@@ -36,6 +36,10 @@ class PostgresClient:
         return res
 
 
+def lst2pgarr(arr):
+    return "{" + ",".join(str(i) for i in arr) + "}"
+
+
 def create_legal_document(doc_name):
     PostgresClient.query(
         """
@@ -46,16 +50,16 @@ def create_legal_document(doc_name):
     )
 
 
-def create_structural_division(id_level, id_document, enumeration, text):
+def create_structural_division(id_level, id_document, enumeration, text, vector):
     result = PostgresClient.query_with_result(
         """
         INSERT INTO division_estructural(
-            id_nivel, id_documento, texto, numeracion
+            id_nivel, id_documento, texto, numeracion, vector
         )
-        VALUES(%s,%s,%s,%s)
+        VALUES(%s,%s,%s,%s,%s)
         RETURNING id;
         """,
-        [id_level, id_document, text, enumeration],
+        [id_level, id_document, text, enumeration, lst2pgarr(vector)],
     )
 
     if result is None:
@@ -76,13 +80,13 @@ def create_structural_division_words(id_str_div, id_cl_w):
     )
 
 
-def create_word_cluster(vector):
+def create_word_cluster(idx, vector):
     PostgresClient.query(
         """
-        INSERT INTO cluster_palabra(vector)
-        VALUES(%s);
+        INSERT INTO cluster_palabra(indice, vector)
+        VALUES(%s, %s);
         """,
-        ["{" + ",".join(str(v) for v in vector) + "}"],
+        [idx, "{" + ",".join(str(v) for v in vector) + "}"],
     )
 
 

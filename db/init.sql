@@ -25,8 +25,8 @@ CREATE TABLE division_estructural(
 );
 
 CREATE TABLE cluster_palabra(
-    id     SERIAL PRIMARY KEY,
-    vector DOUBLE PRECISION[]
+    indice     INTEGER PRIMARY KEY,
+    vector     DOUBLE PRECISION[]
 );
 
 CREATE TABLE similitud(
@@ -35,10 +35,10 @@ CREATE TABLE similitud(
     medida_similitud DOUBLE PRECISION,
     CONSTRAINT fk_cluster_palabra_1
         FOREIGN KEY(cluster_1)
-        REFERENCES cluster_palabra(id),
+        REFERENCES cluster_palabra(indice),
     CONSTRAINT fk_cluster_palabra_2
         FOREIGN KEY(cluster_2)
-        REFERENCES cluster_palabra(id)
+        REFERENCES cluster_palabra(indice)
 );
 
 CREATE TABLE palabra_division_estructural(
@@ -51,7 +51,7 @@ CREATE TABLE palabra_division_estructural(
         REFERENCES division_estructural(id),
     CONSTRAINT fk_cluster_palabra
         FOREIGN KEY(id_cluster_palabra)
-        REFERENCES cluster_palabra(id)
+        REFERENCES cluster_palabra(indice)
 );
 
 -- The only catalog data to populate in the DB

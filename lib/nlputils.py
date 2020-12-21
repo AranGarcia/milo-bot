@@ -13,13 +13,20 @@ class Vectorizer:
         if cls.clusters is None:
             raise ValueError("clusters not initialized")
 
+        # Get number of clusters
+        n_cl = cls.clusters.shape[0]
+
         # TODO: Change Cluster definition in DB to take column index in vector
         indexes = set()
         for word in text.split():
             word_vector = nlp(word).vector
             distances = np.linalg.norm(cls.clusters - word_vector, axis=1)
-            indexes.add(int(np.argmin(distances)) + 1)
-        return indexes
+            indexes.add(int(np.argmin(distances)))
+
+        vector = np.zeros(n_cl, dtype=np.int8)
+        np.put(vector, list(indexes), 1)
+
+        return vector, indexes
 
 
 def normalize_sentence(sentence):

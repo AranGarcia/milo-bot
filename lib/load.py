@@ -12,6 +12,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 
 CLUSTER_FILE = "docs/wv.npy"
+NUM_CL = 1000  # Number of clusters
 
 
 def _iterar_divisiones_documento(data, id_documento):
@@ -23,13 +24,16 @@ def _iterar_divisiones_documento(data, id_documento):
         # Crear representacion vectorizada del texto
         texto_normalizado = nlputils.normalize_sentence(texto)
 
+        # Crear representacion vectorial
+        vector, idxs = nlputils.Vectorizer.vectorize_text(texto_normalizado)
+
         # Cargar la division estructural a la BD
-        indices = nlputils.Vectorizer.vectorize_text(texto_normalizado)
         id_div_est = db.create_structural_division(
             id_level=lvl,
             text=texto,
             id_document=id_documento,
             enumeration=enum,
+            vector=vector
         )
         if id_div_est is None:
             raise ValueError(
@@ -37,7 +41,7 @@ def _iterar_divisiones_documento(data, id_documento):
             )
 
         # Asociar la division estructural al los clusters
-        for idx in indices:
+        for idx in idxs:
             db.create_structural_division_words(id_div_est, idx)
 
         content = it.get("content")
@@ -72,8 +76,8 @@ def cargar_vectores(fname):
 
     # Guardar instancias de cluster_palabra
     print("Guardando instancias de cluster_palabra")
-    for cluster in cc:
-        db.create_word_cluster(cluster)
+    for i, cluster in enumerate(cc):
+        db.create_word_cluster(i, cluster)
 
     nlputils.Vectorizer.clusters = cc
 
