@@ -5,7 +5,12 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.events import FollowupAction, SlotSet
 from rasa_sdk.executor import CollectingDispatcher
 
-from lib.db import retrieve_structural_division
+from lib import db, nlputils
+
+
+# Override default configuration for pg client
+db.PostgresClient.host = "knowledge_base"
+db.PostgresClient.port = 5432
 
 
 DOCS = [
@@ -13,6 +18,13 @@ DOCS = [
     "reglamento general de estudios",
     "reglamento de titulacion profesional",
     "ley organica",
+]
+
+DOC_IDS = [
+    "reglamento-interno",
+    "reglamento-general-de-estudios",
+    "reglamento-de-titulacion-profesional",
+    "ley-organica",
 ]
 
 
@@ -42,27 +54,27 @@ class ActionExtractArticle(Action):
         niv_est = tracker.get_slot("nivel_estructural")
         niv = tracker.get_slot("nivel")
 
-        response_text = self.__generate_message(doc, niv_est, niv)
-
-        dispatcher.utter_message(text=response_text)
-        return [FollowupAction("action_reset_slots")]
-
-    @staticmethod
-    def __generate_message(doc, niv_est, niv):
-        # First determine the document
         if doc is None:
-            return "¿De qué documento necesitas extraer informacion?"
+            # No document provided in message
+            dispatcher.utter_message(text="¿De qué documento necesitas extraer informacion?")
+        else:
+            doc_idx = identify_document(doc)
+            if doc_idx < 0:
+                # Document not known or understood.
+                dispatcher.utter_message(text=f"Perdon, pero el documento '{doc}' no lo conozco.")
+            elif niv_est is None or niv is None:
+                #
+                doc_name = DOCS[doc_idx]
+                dispatcher.utter_message(
+                    text=f"Conozco el {doc_name.title()}, ¿pero que parte quisieras?"
+                )
+            else:
+                doc_id = DOC_IDS[doc_idx]
+                # Index 3 contains the `text` field.
+                res = db.retrieve_structural_division(doc_id, niv_est, int(niv))[3]
+                dispatcher.utter_message(text=res)
 
-        doc_idx = identify_document(doc)
-        if doc_idx < 0:
-            return f'Perdon, pero el documento "{doc}" no lo conozco.'
-
-        doc_name = DOCS[doc_idx]
-
-        if niv_est is None or niv is None:
-            return f"Conozco el {doc_name.title()}, ¿pero que parte quisieras?"
-
-        return f"DOCUMENTO: {doc_name.title()}, NIVEL: {niv_est.capitalize()}, ENUMERACION: {niv}"
+        return [FollowupAction("action_reset_slots")]
 
 
 class ActionSimilaritySearch(Action):
@@ -75,9 +87,9 @@ class ActionSimilaritySearch(Action):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(
-            text="¿Quieres realizar una consulta? Espera, que no tengo los documentos. :("
-        )
+        text = tracker.latest_message["text"]
+        concepts = nlputils.normalize_sentence(text)
+        dispatcher.utter_message(text=concepts)
         return []
 
 

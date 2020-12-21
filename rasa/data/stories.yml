@@ -20,5 +20,4 @@ stories:
 - story: Realizar búsqueda de conceptos similares
   steps:
   - intent: similarity_search
-  - action: utter_similarity_search_result
   - action: action_similarity_search

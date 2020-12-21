@@ -4,6 +4,8 @@ import psycopg2
 
 class PostgresClient:
     con = None
+    host = "localhost"
+    port = 5432
 
     @classmethod
     def __initiate_client(cls):
@@ -11,8 +13,8 @@ class PostgresClient:
             dbname="knowledgebase",
             user="kbadmin",
             password="kbadmin",
-            host="localhost",
-            port=65432,
+            host=cls.host,
+            port=cls.port,
         )
 
     @classmethod
@@ -85,11 +87,20 @@ def create_word_cluster(vector):
 
 
 def retrieve_structural_division(document, id_level, enumeration):
-    return PostgresClient.query_with_result(
+    if not isinstance(document, str) or not isinstance(id_level, str):
+        raise ValueError("document and id_level must be string")
+    if not isinstance(enumeration, int):
+        raise ValueError("enumeration must be int")
+    res = PostgresClient.query_with_result(
         """
-        SELECT *
+        SELECT id, id_nivel, id_documento, texto, numeracion, vector
         FROM division_estructural
         WHERE id_documento = %s AND id_nivel = %s and numeracion = %s;
         """,
         [document, id_level, enumeration],
     )
+
+    if res is None:
+        raise ValueError("empty")
+    else:
+        return res
