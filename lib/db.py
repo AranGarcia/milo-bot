@@ -1,11 +1,12 @@
 # PostgreSQL
+import numpy as np
 import psycopg2
 
 
 class PostgresClient:
     con = None
     host = "localhost"
-    port = 5432
+    port = 65432
 
     @classmethod
     def __initiate_client(cls):
@@ -31,6 +32,16 @@ class PostgresClient:
         cur = cls.con.cursor()
         cur.execute(str_query, args)
         res = cur.fetchone()
+        cls.con.commit()
+        cls.con.close()
+        return res
+
+    @classmethod
+    def query_all(cls, str_query, args=[]):
+        cls.__initiate_client()
+        cur = cls.con.cursor()
+        cur.execute(str_query, args)
+        res = cur.fetchall()
         cls.con.commit()
         cls.con.close()
         return res
@@ -107,4 +118,16 @@ def retrieve_structural_division(document, id_level, enumeration):
     if res is None:
         raise ValueError("empty")
     else:
-        return res
+        return res[0]
+
+
+def retrieve_structural_division_vectors() -> np.ndarray:
+    res = PostgresClient.query_all(
+        """
+        SELECT indice, vector
+        FROM cluster_palabra;
+        """
+    )
+
+    temp = sorted(res, key=lambda x: x[0])
+    return np.array([i[1] for i in temp])
