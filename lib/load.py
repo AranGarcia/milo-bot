@@ -6,7 +6,7 @@ import json
 import os
 
 from lib import db
-from lib.nlputils import normalize_sentence, vectorize, Vectorizer
+from lib.nlputils import normalize_sentence, vectorize, WordSpace
 
 # Numpy
 import numpy as np
@@ -27,7 +27,7 @@ def _iterar_divisiones_documento(data, id_documento):
         texto_normalizado = normalize_sentence(texto)
 
         # Crear representacion vectorial
-        vector, idxs = Vectorizer.vectorize_text(texto_normalizado)
+        vector, idxs = WordSpace.vectorize_text(texto_normalizado)
 
         # Cargar la division estructural a la BD
         id_div_est = db.create_structural_division(
@@ -68,24 +68,24 @@ def cargar_vectores(fname):
         cc = kmeans.cluster_centers_
         with open(CLUSTER_FILE, "wb") as f:
             np.save(f, cc)
-        Vectorizer.clusters = cc
+        WordSpace.clusters = cc
     else:
         print("El archivo de clusters ya existe.")
-        Vectorizer.load_clusters_from_file(CLUSTER_FILE)
+        WordSpace.load_clusters_from_file(CLUSTER_FILE)
 
     # Cargar las similitudes
     if not os.path.exists(MATRIX_FILE):
         print("Calculando matriz de similitud")
-        Vectorizer.calculate_cluster_similarities()
+        WordSpace.calculate_cluster_similarities()
         with open(MATRIX_FILE, "wb") as f:
-            np.save(f, Vectorizer.matrix)
+            np.save(f, WordSpace.matrix)
     else:
         print("El archivo que contiene la matriz ya existe.")
-        Vectorizer.load_similarities_from_file(MATRIX_FILE)
+        WordSpace.load_similarities_from_file(MATRIX_FILE)
 
     # Guardar instancias de cluster_palabra
     print("Guardando instancias de cluster_palabra")
-    for i, cluster in enumerate(Vectorizer.clusters):
+    for i, cluster in enumerate(WordSpace.clusters):
         db.create_word_cluster(i, cluster)
 
     print("Guardando similitudes de clusters")

@@ -78,6 +78,8 @@ class ActionExtractArticle(Action):
 
 
 class ActionSimilaritySearch(Action):
+    n_retrieval = 3  # Hardcodede amount of results expected.
+
     def name(self) -> Text:
         return "action_similarity_search"
 
@@ -89,6 +91,8 @@ class ActionSimilaritySearch(Action):
     ) -> List[Dict[Text, Any]]:
         text = tracker.latest_message["text"]
         concepts = nlputils.normalize_sentence(text)
+        vector_representation = nlputils.WordSpace.vectorize_text()
+
         dispatcher.utter_message(text=concepts)
         return []
 
