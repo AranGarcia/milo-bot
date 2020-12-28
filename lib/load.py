@@ -27,7 +27,7 @@ def _iterar_divisiones_documento(data, id_documento):
         texto_normalizado = normalize_sentence(texto)
 
         # Crear representacion vectorial
-        vector, idxs = WordSpace.vectorize_text(texto_normalizado)
+        vector, idxs = WordSpace.bvectorize_idxs(texto_normalizado)
 
         # Cargar la division estructural a la BD
         id_div_est = db.create_structural_division(
@@ -78,7 +78,7 @@ def cargar_vectores(fname):
         print("Calculando matriz de similitud")
         WordSpace.calculate_cluster_similarities()
         with open(MATRIX_FILE, "wb") as f:
-            np.save(f, WordSpace.matrix)
+            np.save(f, WordSpace.smatrix)
     else:
         print("El archivo que contiene la matriz ya existe.")
         WordSpace.load_similarities_from_file(MATRIX_FILE)

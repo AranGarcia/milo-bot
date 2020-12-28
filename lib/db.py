@@ -121,7 +121,7 @@ def retrieve_structural_division(document, id_level, enumeration):
         return res[0]
 
 
-def retrieve_structural_division_vectors() -> np.ndarray:
+def retrieve_word_clusters() -> np.ndarray:
     res = PostgresClient.query_all(
         """
         SELECT indice, vector
@@ -131,3 +131,33 @@ def retrieve_structural_division_vectors() -> np.ndarray:
 
     temp = sorted(res, key=lambda x: x[0])
     return np.array([i[1] for i in temp])
+
+
+def retrieve_struct_div_words():
+    """
+    Retrieves all instances from the table `palabra_division_estructural` which is used to build
+    the binary vector representation for a text.
+    """
+    res = PostgresClient.query_all(
+        """
+        SELECT id_division_estructural, id_cluster_palabra
+        FROM palabra_division_estructural;
+        """
+    )
+
+    return res
+
+
+# Utility functions
+def retrieve_amount_of_struct_divs():
+    """
+    Returns the amount of instances in the `
+    """
+    res = PostgresClient.query_with_result(
+        """
+        SELECT COUNT(id)
+        FROM division_estructural;
+        """
+    )
+
+    return res[0]
