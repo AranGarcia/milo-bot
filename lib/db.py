@@ -1,3 +1,5 @@
+from typing import Tuple
+
 # PostgreSQL
 import numpy as np
 import psycopg2
@@ -27,7 +29,7 @@ class PostgresClient:
         cls.con.close()
 
     @classmethod
-    def query_with_result(cls, str_query, args=[]):
+    def query_with_result(cls, str_query, args=tuple()):
         cls.__initiate_client()
         cur = cls.con.cursor()
         cur.execute(str_query, args)
@@ -119,6 +121,23 @@ def retrieve_structural_division(document, id_level, enumeration):
         raise ValueError("empty")
     else:
         return res[0]
+
+
+def retrieve_struct_div_by_ids(
+    sd_ids: Tuple[int],
+    fields="id, id_nivel, id_documento, texto, numeracion, vector",
+):
+    """Retrieve Struct Divs instances by IDs from the DB."""
+    res = PostgresClient.query_all(
+        f"""
+        SELECT {fields}
+        FROM division_estructural
+        WHERE id IN %s;
+        """,
+        (sd_ids,),
+    )
+
+    return res
 
 
 def retrieve_word_clusters() -> np.ndarray:

@@ -1,6 +1,7 @@
 from difflib import SequenceMatcher
 from typing import Any, Dict, List, Text
 
+import numpy as np
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import FollowupAction, SlotSet
 from rasa_sdk.executor import CollectingDispatcher
@@ -11,6 +12,11 @@ from lib import db, nlputils
 # Override default configuration for pg client
 db.PostgresClient.host = "knowledge_base"
 db.PostgresClient.port = 5432
+
+# Initialize word space class
+nlputils.WordSpace.load_clusters_from_file("docs/wv.npy")
+nlputils.WordSpace.load_similarities_from_file("docs/sm.npy")
+nlputils.WordSpace.load_binary_representations()
 
 
 DOCS = [
@@ -78,8 +84,6 @@ class ActionExtractArticle(Action):
 
 
 class ActionSimilaritySearch(Action):
-    n_retrieval = 3  # Hardcodede amount of results expected.
-
     def name(self) -> Text:
         return "action_similarity_search"
 
@@ -90,11 +94,46 @@ class ActionSimilaritySearch(Action):
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
         text = tracker.latest_message["text"]
-        concepts = nlputils.normalize_sentence(text)
-        vector_representation = nlputils.WordSpace.vectorize_text()
+        arts = self.__fetch_articles(text)
 
-        dispatcher.utter_message(text=concepts)
+        # TODO: Format beautifully
+        # Index 3 contains the text
+        result = "\n".join(a[3] for a in arts)
+
+        dispatcher.utter_message(text=result)
         return []
+
+    @classmethod
+    def __fetch_articles(cls, text, n_articles=3) -> List[str]:
+        """Fetches similar articles using concepts from `text`."""
+        # 1. Normalize text.
+        concepts = nlputils.normalize_sentence(text)
+        # 2. Create vector
+        binary_vector = nlputils.WordSpace.bvectorize(concepts)
+        # 3. Calculare similarities
+        # FIXME: Indexes assumes that each row is a one-to-one match with an ID in `division_estructural`
+        #        This may cause bugs as the rows can be switched (hope not).
+        indexes = cls.__calculate_similarities(binary_vector, n_articles)
+        # 4. Fetch most similar articles.
+        return db.retrieve_struct_div_by_ids(
+            sd_ids=tuple(indexes),
+            fields="id, id_nivel, id_documento, texto, numeracion",
+        )
+
+    @staticmethod
+    def __calculate_similarities(q, n_min):
+        """Calculates similarities of a query vector `q` upon a collection of binary sentences."""
+        # BS is the binary sentences of our collectio
+        bs = nlputils.WordSpace.binary_vectors
+        # W is the similarity matrix.
+        W = nlputils.WordSpace.smatrix
+
+        similarities = np.apply_along_axis(
+            lambda s: (q.dot(W).dot(s)) / (np.linalg.norm(q) * np.linalg.norm(s)), axis=1, arr=bs
+        )
+
+        # Indexes should all be int type
+        return [int(i) for i in similarities.argsort()[-3:] + 1]
 
 
 class ResetSlots(Action):

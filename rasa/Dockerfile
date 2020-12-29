@@ -21,6 +21,7 @@ RUN python -m spacy download es_core_news_md
 
 # Copy actions folder to working directory
 COPY rasa/actions /app/actions
+COPY docs /app/docs
 COPY lib /app/lib
 
 # By best practices, don't run the code with root user
