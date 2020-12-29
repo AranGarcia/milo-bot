@@ -46,6 +46,15 @@ def identify_document(doc_name):
     return idx
 
 
+def format_title(title: str) -> str:
+    return title.replace("-", " ").title()
+
+
+def sd_html(doc_name, level, enumeration, text):
+    """Format document text with HTML."""
+    return f"<b>{level} {enumeration} del {doc_name}</b>. {text}"
+
+
 class ActionExtractArticle(Action):
     def name(self) -> Text:
         return "action_extract_article"
@@ -85,15 +94,13 @@ class ActionExtractArticle(Action):
                         f"<b>Documento</b>: {doc}, <b>{niv_est} {niv}</b>"
                     )
                 else:
-                    ftext = f"<b>{res[1].capitalize()} {res[4]} del {self.__format_title(doc_id)}</b>:<br>{res[3]}"
+                    ftext = sd_html(
+                        format_title(res[2]), res[1].capitalize(), res[4], res[3]
+                    )
 
                 dispatcher.utter_message(text=ftext)
 
         return [FollowupAction("action_reset_slots")]
-
-    @staticmethod
-    def __format_title(title: str) -> str:
-        return title.replace("-", " ").title()
 
 
 class ActionSimilaritySearch(Action):
@@ -111,9 +118,13 @@ class ActionSimilaritySearch(Action):
 
         # TODO: Format beautifully
         # Index 3 contains the text
-        result = "\n".join(a[3] for a in arts)
+        # result = "\n".join(a[3] for a in arts)
+        results = []
+        for a in arts:
+            results.append(sd_html(format_title(a[1]), a[0].capitalize(), a[3], a[2]))
 
-        dispatcher.utter_message(text=result)
+        ftext = "<br>".join(results)
+        dispatcher.utter_message(text=ftext)
         return []
 
     @classmethod
@@ -130,7 +141,7 @@ class ActionSimilaritySearch(Action):
         # 4. Fetch most similar articles.
         return db.retrieve_struct_div_by_ids(
             sd_ids=tuple(indexes),
-            fields="id, id_nivel, id_documento, texto, numeracion",
+            fields="id_nivel, id_documento, texto, numeracion",
         )
 
     @staticmethod
