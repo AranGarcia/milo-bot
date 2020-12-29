@@ -91,6 +91,7 @@ def cargar_vectores(fname):
     print("Guardando similitudes de clusters")
     # TODO: Guardar similitudes en BD
 
+
 def cargar_documento(fname):
     if not fname.endswith(".json"):
         raise ValueError(f"archivo {fname} tiene extension de archivo invalido.")

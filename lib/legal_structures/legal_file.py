@@ -68,7 +68,7 @@ class LegalFileStructure:
             item_list = content["items"]
 
         item_dict = {
-            "text": self._current_item.text.lower(),
+            "text": self._current_item.text,
             "enum": self._current_item.enumeration,
         }
         # Articles have no content

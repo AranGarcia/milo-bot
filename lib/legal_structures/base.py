@@ -72,9 +72,7 @@ def identify_item(text: str) -> ItemType:
 
 
 class LegalDocItem:
-    __roman_numeral_regex = re.compile(
-        r"^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$"
-    )
+    __roman_numeral_regex = re.compile(r"^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$")
 
     def __init__(self, itemtype, enumeration, text):
         self.itemtype = itemtype
@@ -84,10 +82,7 @@ class LegalDocItem:
         else:
             self.enumeration = self.__enumeration_to_int(enumeration)
 
-        if itemtype != ItemType.ARTICULO:
-            self.text = text
-        else:
-            self.text = text.title()
+        self.text = text
 
     @classmethod
     def __roman_to_int(cls, roman_numeral_string):
