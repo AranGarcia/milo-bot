@@ -77,10 +77,23 @@ class ActionExtractArticle(Action):
             else:
                 doc_id = DOC_IDS[doc_idx]
                 # Index 3 contains the `text` field.
-                res = db.retrieve_structural_division(doc_id, niv_est, int(niv))[3]
-                dispatcher.utter_message(text=res)
+                res = db.retrieve_structural_division(doc_id, niv_est, int(niv))
+
+                if res is None:
+                    ftext = (
+                        "No pude encontrar algun reglamento con la siguiente informacion &#129300; <br>"
+                        f"<b>Documento</b>: {doc}, <b>{niv_est} {niv}</b>"
+                    )
+                else:
+                    ftext = f"<b>{res[1].capitalize()} {res[4]} del {self.__format_title(doc_id)}</b>:<br>{res[3]}"
+
+                dispatcher.utter_message(text=ftext)
 
         return [FollowupAction("action_reset_slots")]
+
+    @staticmethod
+    def __format_title(title: str) -> str:
+        return title.replace("-", " ").title()
 
 
 class ActionSimilaritySearch(Action):

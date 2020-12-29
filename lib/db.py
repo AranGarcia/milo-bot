@@ -112,15 +112,12 @@ def retrieve_structural_division(document, id_level, enumeration):
         """
         SELECT id, id_nivel, id_documento, texto, numeracion, vector
         FROM division_estructural
-        WHERE id_documento = %s AND id_nivel = %s and numeracion = %s;
+        WHERE id_documento = %s AND id_nivel = %s AND numeracion = %s;
         """,
         [document, id_level, enumeration],
     )
 
-    if res is None:
-        raise ValueError("empty")
-    else:
-        return res[0]
+    return res
 
 
 def retrieve_struct_div_by_ids(

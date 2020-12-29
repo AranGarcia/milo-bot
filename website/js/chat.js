@@ -123,9 +123,9 @@ function sendRequest(text) {
         if (response.status == 200) {
             createContainer(response.data[0].text, true);
         } else {
-            createContainer("Disculpa, ahorita no me siento bien :("), true;
+            createContainer("Disculpa, ahorita no me siento bien &#129298;"), true;
         }
     }).catch(function (error) {
-        createContainer("Lo lamento, por el momento no soy capaz de atender peticiones. :(", true);
+        createContainer("Lo lamento, por el momento no soy capaz de atender peticiones. &#128565;", true);
     });
 }
