@@ -2,13 +2,14 @@ window.onload = function () {
     document.getElementById("chat-input").addEventListener(
         // Allow messages to be sent when pressing ENTER
         "keypress", function (event) {
-            if (event.keyCode == 13) {
+            if (event.key == 'Enter') {
+                var element = document.getElementById("chat-display-window");
                 sendMessage();
 
-                // Auto scroll the chat area
-                var element = document.getElementById("chat-display-window");
+                // // Auto scroll the chat area
+                element = document.getElementById("chat-display-window");
                 var xh = element.scrollHeight;
-                element.scrollTo(0, xh);
+                element.scrollTop = element.scrollHeight
             }
         }
     );
@@ -31,7 +32,7 @@ const sleep = (milliseconds) => {
 
 async function healthcheck() {
     await sleep(1000);
-    createContainer("Hola! Mi nombre es Milo. :)", true);
+    createContainer("Hola! Mi nombre es Milo. &#129302;", true);
     await sleep(1000);
     axios.get(
         URL,
@@ -39,10 +40,10 @@ async function healthcheck() {
         if (response.status == 200) {
             createContainer("Dime, ¿en qué puedo ayudarte?", true);
         } else {
-            createContainer("Me gustaría ayudarte, pero no me siento bien. :("), true;
+            createContainer("Me gustaría ayudarte, pero no me siento bien. &#129298;"), true;
         }
     }).catch(function (error) {
-        createContainer("Lo lamento, por el momento no soy capaz de atender peticiones. :(", true);
+        createContainer("Lo lamento, por el momento no soy capaz de atender peticiones. &#128565;", true);
     });
 }
 
@@ -65,13 +66,14 @@ function sendMessage() {
     createContainer(text);
     element.value = "";
 
-    // Auto scroll the chat area
-    element = document.getElementById("chat-display-window");
-    var xh = element.scrollHeight;
-    element.scrollTo(0, xh);
-
     // Send request to HTTP Server
     sendRequest(text);
+
+    // Auto scroll the chat area
+    // element = document.getElementById("chat-display-window");
+    // var xh = element.scrollHeight;
+    // // element.scrollTo(0, xh);
+    // element.scrollTop = element.scrollHeight;
 }
 
 function createContainer(textInput, response = false) {
