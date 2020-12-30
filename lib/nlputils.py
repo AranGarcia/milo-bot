@@ -68,7 +68,7 @@ class WordSpace:
         vector = np.zeros(n_cl, dtype=np.int8)
         np.put(vector, list(indexes), 1)
 
-        return vector, indexes
+        return vector, list(indexes)
 
     @classmethod
     def bvectorize(cls, text):
