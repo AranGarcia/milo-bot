@@ -9,5 +9,4 @@ __pycache__/
 
 # Rasa
 models/
-tests/**
 results/

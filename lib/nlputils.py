@@ -7,7 +7,7 @@ from lib.db import retrieve_amount_of_struct_divs, retrieve_struct_div_words
 nlp = spacy.load("es_core_news_md")
 
 
-def _cosine_similarity(v1, v2):
+def cosine_similarity(v1, v2):
     return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
 
 
@@ -42,7 +42,7 @@ class WordSpace:
         md = cls.clusters.shape[0]  # Dimension of the square matrix
         cls.smatrix = np.zeros((md, md))
         for idx in np.ndindex(md, md):
-            cls.smatrix[idx] = _cosine_similarity(cls.clusters[idx[0]], cls.clusters[idx[1]])
+            cls.smatrix[idx] = cosine_similarity(cls.clusters[idx[0]], cls.clusters[idx[1]])
 
     @classmethod
     def bvectorize_idxs(cls, text):
