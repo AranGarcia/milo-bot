@@ -38,7 +38,7 @@ CAPÍTULO I - GENERALIDADES
 Artículo 10. El Instituto concibe la función educativa como un proceso para generar, adquirir, transmitir y divulgar conocimientos y capacidades; para fortalecer e impulsar la investigación científica y tecnológica, así como para acrecentar y difundir la cultura.
 La función educativa institucional, en sus diversos niveles y modalidades educativos, tiene como propósito la formación integral de técnicos, profesionistas, posgraduados e investigadores.
 
-Artículo 11. El Instituto realiza la función educativa de docencia en los niveles medio superior, superior y deposgrado a través de los planes y programas de estudio acordados por el Consejo General Consultivo yautorizados por el director general.
+Artículo 11. El Instituto realiza la función educativa de docencia en los niveles medio superior, superior y de posgrado a través de los planes y programas de estudio acordados por el Consejo General Consultivo y autorizados por el director general.
 
 Artículo 12. La investigación científica y tecnológica como función sustantiva del Instituto permite la generación
 del conocimiento y el fortalecimiento de la ciencia básica y aplicada para contribuir a la solución de los
@@ -481,7 +481,7 @@ Artículo 126. Para los efectos del presente Reglamento se entenderá por person
 
 Artículo 127. Para el cumplimiento de sus funciones adjetivas, el Instituto contará con personal de apoyo y asistencia a la educación, cuyas relaciones laborales se rigen por el Reglamento de las Condiciones Generales de Trabajo del Personal No Docente del Instituto Politécnico Nacional, que establece las categorías y niveles en que se clasifica el personal, así como los procedimientos de admisión y evaluación, la descripción de funciones, derechos, obligaciones, sanciones y condiciones de permanencia y promoción.
 
-Artículo 128. El personal de apoyo y asistencia a la educación, además del cumplimiento de las obligacionescontenidas en el Reglamento de las Condiciones Generales de Trabajo respectivo, deberá observar lassiguientes:
+Artículo 128. El personal de apoyo y asistencia a la educación, además del cumplimiento de las obligaciones contenidas en el Reglamento de las Condiciones Generales de Trabajo respectivo, deberá observar las siguientes:
 I. Guardar el orden y la disciplina en su centro de trabajo;
 II. Conservar en buen estado el mobiliario, equipo y demás material que utilice en el desempeño de sus labores;
 III. Cumplir con las funciones y tareas que le asignen sus superiores jerárquicos;
@@ -816,7 +816,7 @@ VII. De la obra editorial y los materiales educativos.
 
 Artículo 197. Las comisiones especiales serán las que el Consejo General Consultivo designe para el debido cumplimiento de las demás funciones de su competencia.
 
-Artículo 198. Las ausencias de los consejeros electos a las sesiones del Consejo General Consultivo o de suscomisiones podrán ser temporales o definitivas.
+Artículo 198. Las ausencias de los consejeros electos a las sesiones del Consejo General Consultivo o de sus comisiones podrán ser temporales o definitivas.
 
 Artículo 199. Serán consideradas ausencias temporales:
 I. En el caso del personal académico, cuando solicite licencia en su trabajo o por incapacidad médica que dure entre uno y tres meses, y
@@ -875,7 +875,7 @@ II. Ser alumno de posgrado y haber acreditado más del 50 por ciento de las asig
 
 Artículo 214. Los representantes del personal académico y del personal de apoyo y asistencia a la educación serán designados por los comités ejecutivos delegacionales correspondientes.
 
-Artículo 215. Los consejeros electos tomarán posesión de sus cargos en la sesión ordinaria correspondiente alsegundo mes posterior al inicio del ciclo escolar. Durarán en el desempeño de sus funciones un año y nopodrán ser reelectos para el periodo inmediato.
+Artículo 215. Los consejeros electos tomarán posesión de sus cargos en la sesión ordinaria correspondiente al segundo mes posterior al inicio del ciclo escolar. Durarán en el desempeño de sus funciones un año y no podrán ser reelectos para el periodo inmediato.
 
 Artículo 216. Son aplicables a los consejos técnicos consultivos escolares en lo conducente las disposiciones de los artículos 193, 194 y 198 a 201 del presente Reglamento.
 
