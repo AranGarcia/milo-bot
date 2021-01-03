@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 # PostgreSQL
 import numpy as np
@@ -63,16 +63,16 @@ def create_legal_document(doc_name):
     )
 
 
-def create_structural_division(id_level, id_document, enumeration, text, vector):
+def create_structural_division(id_level, id_document, enumeration, text):
     result = PostgresClient.query_with_result(
         """
         INSERT INTO division_estructural(
-            id_nivel, id_documento, texto, numeracion, vector
+            id_nivel, id_documento, texto, numeracion
         )
-        VALUES(%s,%s,%s,%s,%s)
+        VALUES(%s,%s,%s,%s)
         RETURNING id;
         """,
-        [id_level, id_document, text, enumeration, lst2pgarr(vector)],
+        [id_level, id_document, text, enumeration],
     )
 
     if result is None:
@@ -82,10 +82,14 @@ def create_structural_division(id_level, id_document, enumeration, text, vector)
 
 
 def create_structural_division_words(id_str_div, id_cl_w):
+    if id_str_div is None:
+        raise ValueError("id_division_estructural cannot be null")
+    if id_cl_w is None:
+        raise ValueError("id_palabra cannot be null")
     PostgresClient.query(
         """
         INSERT INTO palabra_division_estructural(
-            id_division_estructural, id_cluster_palabra
+            id_division_estructural, id_palabra
         )
         VALUES(%s, %s)
         """,
@@ -93,14 +97,21 @@ def create_structural_division_words(id_str_div, id_cl_w):
     )
 
 
-def create_word_cluster(idx, vector):
-    PostgresClient.query(
-        """
-        INSERT INTO cluster_palabra(indice, vector)
-        VALUES(%s, %s);
-        """,
-        [idx, "{" + ",".join(str(v) for v in vector) + "}"],
-    )
+def create_word(text, vector) -> Optional[int]:
+    """Creates an instance in the table `palabra` and returns the created ID (indice)."""
+    try:
+        res = PostgresClient.query_with_result(
+            """
+            INSERT INTO palabra(texto, vector)
+            VALUES(%s, %s)
+            RETURNING indice;
+            """,
+            [text, "{" + ",".join(str(v) for v in vector) + "}"],
+        )
+    except psycopg2.errors.UniqueViolation:
+        return None
+
+    return res[0]
 
 
 def retrieve_structural_division(document, id_level, enumeration):
@@ -129,7 +140,7 @@ def retrieve_struct_div_by_ids(
         f"""
         SELECT {fields}
         FROM division_estructural
-        WHERE id IN %s;
+        WHERE id IN %s AND id_nivel = 'articulo';
         """,
         (sd_ids,),
     )
@@ -137,16 +148,21 @@ def retrieve_struct_div_by_ids(
     return res
 
 
-def retrieve_word_clusters() -> np.ndarray:
+def retrieve_words() -> Tuple[np.ndarray, np.ndarray]:
+    """Returns two arrays: one with the vectors and another with the indexes."""
     res = PostgresClient.query_all(
         """
-        SELECT indice, vector
-        FROM cluster_palabra;
+        SELECT indice, texto, vector
+        FROM palabra;
         """
     )
 
-    temp = sorted(res, key=lambda x: x[0])
-    return np.array([i[1] for i in temp])
+    # temp = sorted(res, key=lambda x: x[0])
+    return (
+        np.array([i[0] for i in res]),
+        np.array([i[1] for i in res]),
+        np.array([i[2] for i in res]),
+    )
 
 
 def retrieve_struct_div_words():
@@ -164,7 +180,51 @@ def retrieve_struct_div_words():
     return res
 
 
+def retrieve_struct_div_by_word_id(
+    word_ids: Tuple[str], fields: str = "id, id_documento, id_nivel, numeracion, texto"
+):
+    res = PostgresClient.query_all(
+        f"""
+        SELECT {fields}
+        FROM division_estructural
+        WHERE id IN (
+                SELECT id_division_estructural
+                FROM palabra_division_estructural
+                WHERE id_palabra in %s
+        )
+        """,
+        (word_ids,),
+    )
+
+    return res
+
+
+def retrieve_clusters():
+    """Retrieves all instances from the table `cluster_palabra`."""
+    res = PostgresClient.query_all(
+        """
+        SELECT indice, vector
+        FROM cluster_palabra;
+        """
+    )
+    return res
+
+
 # Utility functions
+def retrieve_amount_of_clusters():
+    """
+    Returns the amount of instances in the `
+    """
+    res = PostgresClient.query_with_result(
+        """
+        SELECT COUNT(*)
+        FROM cluster_palabra;
+        """
+    )
+
+    return res[0]
+
+
 def retrieve_amount_of_struct_divs():
     """
     Returns the amount of instances in the `

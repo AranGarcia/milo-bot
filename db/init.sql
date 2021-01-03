@@ -15,7 +15,7 @@ CREATE TABLE division_estructural(
     id_documento VARCHAR(50),
     texto        TEXT,
     numeracion   INTEGER,
-    vector       INTEGER[],
+    -- vector       INTEGER[],
     CONSTRAINT fk_documento
         FOREIGN KEY(id_documento)
         REFERENCES documento(nombre_documento),
@@ -24,34 +24,22 @@ CREATE TABLE division_estructural(
         REFERENCES nivel_division(nombre_division)
 );
 
-CREATE TABLE cluster_palabra(
-    indice     INTEGER PRIMARY KEY,
-    vector     DOUBLE PRECISION[]
-);
-
-CREATE TABLE similitud(
-    cluster_1 SERIAL,
-    cluster_2 SERIAL,
-    medida_similitud DOUBLE PRECISION,
-    CONSTRAINT fk_cluster_palabra_1
-        FOREIGN KEY(cluster_1)
-        REFERENCES cluster_palabra(indice),
-    CONSTRAINT fk_cluster_palabra_2
-        FOREIGN KEY(cluster_2)
-        REFERENCES cluster_palabra(indice)
+CREATE TABLE palabra(
+    indice     SERIAL PRIMARY KEY,
+    vector     DOUBLE PRECISION[],
+    texto      TEXT UNIQUE
 );
 
 CREATE TABLE palabra_division_estructural(
+    id                      SERIAL PRIMARY KEY,
     id_division_estructural SERIAL,
-    id_cluster_palabra      SERIAL,
-    CONSTRAINT pk_palabras_division_estructural
-        PRIMARY KEY(id_division_estructural, id_cluster_palabra),
+    id_palabra              SERIAL,
     CONSTRAINT fk_division_estrucutral
         FOREIGN KEY(id_division_estructural)
         REFERENCES division_estructural(id),
-    CONSTRAINT fk_cluster_palabra
-        FOREIGN KEY(id_cluster_palabra)
-        REFERENCES cluster_palabra(indice)
+    CONSTRAINT fk_palabra
+        FOREIGN KEY(id_palabra)
+        REFERENCES palabra(indice)
 );
 
 -- The only catalog data to populate in the DB
