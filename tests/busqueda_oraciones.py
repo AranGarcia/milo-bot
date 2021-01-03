@@ -25,8 +25,10 @@ def test_similarity(w, thres=0.5):
         arr=VECTORS,
     )
 
-    sd_ids = np.argwhere(sims >= thres)
-    return sims[sd_ids], tuple(int(IDXS[i]) for i in sd_ids)
+    # Get only a maximum of 10 retrievals
+    sims_idxs = sims.argsort()[-10:]
+    w_ids = np.argwhere(sims[sims_idxs] >= thres)
+    return sims[sims_idxs][w_ids], tuple(int(IDXS[i]) for i in sims_idxs[w_ids])
 
 
 def test_cases(text: str) -> None:
@@ -40,16 +42,17 @@ def test_cases(text: str) -> None:
         print(f"\t\t  Doc: {sd[1]} {sd[2]} {sd[3]}")
 
 
-if __name__ == "__main__":
-    txt = [
-        # "credencial",
-        # "falsificar",
-        # "intercambio",
-        # "movilidad",
-        "rallar",
-        "propiedad",
-    ]
-    for t in txt:
-        print(f"'{t}':")
-        test_cases(t)
-        print()
+txt = [
+    "responsabilidad estudiantes",
+    "rallar propiedad",
+    "requisitos director",
+    "movilidad academica",
+    "servicio social",
+]
+
+# test_vectors()
+
+for t in txt:
+    print(f"'{t}':")
+    test_cases(t)
+    print()

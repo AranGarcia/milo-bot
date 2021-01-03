@@ -111,7 +111,7 @@ def normalize_sentence(sentence):
 
 
 def vectorize(w):
-    return nlp(w)[0].vector
+    return nlp(w).vector
 
 
 def similarity(w1: str, w2: str) -> float:
