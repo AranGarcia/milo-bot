@@ -3,7 +3,7 @@
 import argparse
 import os
 
-from lib.load import cargar_documento, cargar_vectores
+from lib.load import cargar_documento
 
 parser = argparse.ArgumentParser(
     description="Script de carga de documentos normativos estructurados a la base de conocimiento"
@@ -22,9 +22,6 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-
-# Calculo de vectores utilizando el arcihvo con los lemas
-cargar_vectores(args.lemas_txt)
 
 # Si no existe el directorio, termina la ejecucion
 if not os.path.exists(args.dir_json):

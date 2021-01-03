@@ -1,7 +1,12 @@
 """Funciones de transformacion de archivos."""
 
+import spacy
+
 from lib.legal_structures.base import identify_item
 from lib.legal_structures.legal_file import LegalFileStructure
+
+
+nlp = spacy.load("es_core_news_lg")
 
 
 def estructurar_documento(fname: str, dir_out: str):
