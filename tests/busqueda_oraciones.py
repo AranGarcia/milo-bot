@@ -50,8 +50,6 @@ txt = [
     "servicio social",
 ]
 
-# test_vectors()
-
 for t in txt:
     print(f"'{t}':")
     test_cases(t)

@@ -14,9 +14,7 @@ db.PostgresClient.host = "knowledge_base"
 db.PostgresClient.port = 5432
 
 # Initialize word space class
-nlputils.WordSpace.load_clusters_from_file("docs/wv.npy")
-nlputils.WordSpace.load_similarities_from_file("docs/sm.npy")
-nlputils.WordSpace.load_binary_representations()
+nlputils.WordSpace.load()
 
 
 DOCS = [
@@ -94,9 +92,7 @@ class ActionExtractArticle(Action):
                         f"<b>Documento</b>: {doc}, <b>{niv_est} {niv}</b>"
                     )
                 else:
-                    ftext = sd_html(
-                        format_title(res[2]), res[1].capitalize(), res[4], res[3]
-                    )
+                    ftext = sd_html(format_title(res[2]), res[1].capitalize(), res[4], res[3])
 
                 dispatcher.utter_message(text=ftext)
 
@@ -114,50 +110,33 @@ class ActionSimilaritySearch(Action):
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
         text = tracker.latest_message["text"]
+        norm_text = nlputils.normalize_sentence(text)
         arts = self.__fetch_articles(text)
 
-        # TODO: Format beautifully
-        # Index 3 contains the text
-        # result = "\n".join(a[3] for a in arts)
-        results = []
-        for a in arts:
-            results.append(sd_html(format_title(a[1]), a[0].capitalize(), a[3], a[2]))
+        if not arts:
+            message_text = f"No se encontraron art&iacute;culos con los conceptos {norm_text}"
+        else:
+            results = []
+            for a in arts:
+                results.append(sd_html(format_title(a[0]), a[1].capitalize(), a[2], ""))
 
-        ftext = "<br>".join(results)
-        dispatcher.utter_message(text=ftext)
+            ftext = "<br>".join(results)
+            message_text = f"Busqueda realizada con conceptos <i>{norm_text}<i><br>{ftext}"
+
+        dispatcher.utter_message(text=message_text)
         return []
 
     @classmethod
-    def __fetch_articles(cls, text, n_articles=3) -> List[str]:
+    def __fetch_articles(cls, text: str) -> List[str]:
         """Fetches similar articles using concepts from `text`."""
-        # 1. Normalize text.
-        concepts = nlputils.normalize_sentence(text)
-        # 2. Create vector
-        binary_vector = nlputils.WordSpace.bvectorize(concepts)
-        # 3. Calculare similarities
-        # FIXME: Indexes assumes that each row is a one-to-one match with an ID in `division_estructural`
-        #        This may cause bugs as the rows can be switched (hope not).
-        indexes = cls.__calculate_similarities(binary_vector, n_articles)
-        # 4. Fetch most similar articles.
-        return db.retrieve_struct_div_by_ids(
-            sd_ids=tuple(indexes),
-            fields="id_nivel, id_documento, texto, numeracion",
+        _, sd_ids = nlputils.WordSpace.search(text)
+
+        if not sd_ids:
+            return []
+
+        return db.retrieve_struct_div_by_word_id(
+            sd_ids, fields="id_documento, id_nivel, numeracion, texto"
         )
-
-    @staticmethod
-    def __calculate_similarities(q, n_min):
-        """Calculates similarities of a query vector `q` upon a collection of binary sentences."""
-        # BS is the binary sentences of our collectio
-        bs = nlputils.WordSpace.binary_vectors
-        # W is the similarity matrix.
-        W = nlputils.WordSpace.smatrix
-
-        similarities = np.apply_along_axis(
-            lambda s: (q.dot(W).dot(s)) / (np.linalg.norm(q) * np.linalg.norm(s)), axis=1, arr=bs
-        )
-
-        # Indexes should all be int type
-        return [int(i) for i in similarities.argsort()[-3:] + 1]
 
 
 class ResetSlots(Action):

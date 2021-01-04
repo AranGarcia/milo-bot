@@ -17,7 +17,7 @@ RUN apt update -y && \
 # Installing python requirements and dependencies
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-RUN python -m spacy download es_core_news_md
+RUN python -m spacy download es_core_news_lg
 
 # Copy actions folder to working directory
 COPY rasa/actions /app/actions

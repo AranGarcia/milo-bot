@@ -121,7 +121,7 @@ def retrieve_structural_division(document, id_level, enumeration):
         raise ValueError("enumeration must be int")
     res = PostgresClient.query_with_result(
         """
-        SELECT id, id_nivel, id_documento, texto, numeracion, vector
+        SELECT id, id_nivel, id_documento, texto, numeracion
         FROM division_estructural
         WHERE id_documento = %s AND id_nivel = %s AND numeracion = %s;
         """,
@@ -185,7 +185,7 @@ def retrieve_struct_div_by_word_id(
 ):
     res = PostgresClient.query_all(
         f"""
-        SELECT {fields}
+        SELECT DISTINCT ON (id) {fields}
         FROM division_estructural
         WHERE id IN (
                 SELECT id_division_estructural
@@ -196,17 +196,6 @@ def retrieve_struct_div_by_word_id(
         (word_ids,),
     )
 
-    return res
-
-
-def retrieve_clusters():
-    """Retrieves all instances from the table `cluster_palabra`."""
-    res = PostgresClient.query_all(
-        """
-        SELECT indice, vector
-        FROM cluster_palabra;
-        """
-    )
     return res
 
 
