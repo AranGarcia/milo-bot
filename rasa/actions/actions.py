@@ -1,7 +1,6 @@
 from difflib import SequenceMatcher
 from typing import Any, Dict, List, Text
 
-import numpy as np
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import FollowupAction, SlotSet
 from rasa_sdk.executor import CollectingDispatcher
@@ -100,6 +99,17 @@ class ActionExtractArticle(Action):
 
 
 class ActionSimilaritySearch(Action):
+    QUERY_WORDS = {
+        "acercar",
+        "artículo",
+        "articulo",
+        "acercar",
+        "mencionar",
+        "partir",
+        "reglamento",
+        "querer",
+    }
+
     def name(self) -> Text:
         return "action_similarity_search"
 
@@ -110,8 +120,11 @@ class ActionSimilaritySearch(Action):
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
         text = tracker.latest_message["text"]
+
+        # Clean text before using it
         norm_text = nlputils.normalize_sentence(text)
-        arts = self.__fetch_articles(text)
+        query_text = self.__clean_query(norm_text)
+        arts = self.__fetch_articles(query_text)
 
         if not arts:
             message_text = f"No se encontraron art&iacute;culos con los conceptos {norm_text}"
@@ -121,15 +134,16 @@ class ActionSimilaritySearch(Action):
                 results.append(sd_html(format_title(a[0]), a[1].capitalize(), a[2], ""))
 
             ftext = "<br>".join(results)
-            message_text = f"Busqueda realizada con conceptos <i>{norm_text}<i><br>{ftext}"
+            concept_words = f"<u>{'</u> <u>'.join(query_text.split())}</u>"
+            message_text = f"Busqueda realizada con los conceptos <i>{concept_words}<i><br>{ftext}"
 
         dispatcher.utter_message(text=message_text)
         return []
 
     @classmethod
-    def __fetch_articles(cls, text: str) -> List[str]:
+    def __fetch_articles(cls, text: str, threshold: float = 0.75) -> List[str]:
         """Fetches similar articles using concepts from `text`."""
-        _, sd_ids = nlputils.WordSpace.search(text)
+        _, sd_ids = nlputils.WordSpace.search(text, threshold=threshold)
 
         if not sd_ids:
             return []
@@ -137,6 +151,16 @@ class ActionSimilaritySearch(Action):
         return db.retrieve_struct_div_by_word_id(
             sd_ids, fields="id_documento, id_nivel, numeracion, texto"
         )
+
+    @classmethod
+    def __clean_query(cls, text: str) -> str:
+        clean_text = []
+
+        for w in text.split():
+            if w not in cls.QUERY_WORDS:
+                clean_text.append(w)
+
+        return " ".join(clean_text)
 
 
 class ResetSlots(Action):

@@ -48,7 +48,7 @@ nlu:
 - intent: similarity_search
   examples: |
     - que articulos hablan acerca de esto
-    - en que partes se mencionan acera de otra cosa
+    - en que partes se mencionan acerca de otra cosa
 
 - regex: articulo
   examples: |
