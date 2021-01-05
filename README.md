@@ -10,6 +10,7 @@ Chatbot para extraccion de documentos normativos para ESCOM. 🤖
     - [Entrenando el modelo](#entrenando-el-modelo)
     - [Preparando el contenedor](#preparando-el-contenedor)
   - [Ejecutando el servicio](#ejecutando-el-servicio)
+  - [Prubeas](#prubeas)
 
 
 ## Instalación
@@ -34,8 +35,6 @@ python -m spacy download es_core_news_md
 
 ### Entrenando el modelo
 
-
-
 ```sh
 cd rasa
 rasa train
@@ -53,3 +52,12 @@ docker network create interpreter_net
 ```bash
 docker-compose up
 ```
+
+## Prubeas
+
+Se podría preguntar las siguientes consultas al bot.
+
+- ¿Cuáles son los requisitos para ingresar?
+- ¿Que reglamentos hablan sobre la movilidad academica?
+- ¿Que pasa si tengo inconformidades?
+- ¿Que pasa si estoy en situación irregular?

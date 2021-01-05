@@ -103,9 +103,12 @@ class ActionSimilaritySearch(Action):
         "acercar",
         "artículo",
         "articulo",
+        "articulos",
         "acercar",
         "mencionar",
         "partir",
+        "paso",
+        "pasar",
         "reglamento",
         "querer",
     }
@@ -126,22 +129,24 @@ class ActionSimilaritySearch(Action):
         query_text = self.__clean_query(norm_text)
         arts = self.__fetch_articles(query_text)
 
-        if not arts:
-            message_text = f"No se encontraron art&iacute;culos con los conceptos {norm_text}"
+        concept_words = f"<u>{'</u> <u>'.join(query_text.split())}</u>"
+        if not query_text:
+            message_text = f"No comprend&iacute; lo que deseas buscar. ¿Podrias aclararlo mejor? &#129300;"
+        elif not arts:
+            message_text = f"No se encontraron art&iacute;culos con los conceptos {concept_words}"
         else:
             results = []
             for a in arts:
                 results.append(sd_html(format_title(a[0]), a[1].capitalize(), a[2], ""))
 
             ftext = "<br>".join(results)
-            concept_words = f"<u>{'</u> <u>'.join(query_text.split())}</u>"
             message_text = f"Busqueda realizada con los conceptos <i>{concept_words}<i><br>{ftext}"
 
         dispatcher.utter_message(text=message_text)
         return []
 
     @classmethod
-    def __fetch_articles(cls, text: str, threshold: float = 0.75) -> List[str]:
+    def __fetch_articles(cls, text: str, threshold: float = 0.8) -> List[str]:
         """Fetches similar articles using concepts from `text`."""
         _, sd_ids = nlputils.WordSpace.search(text, threshold=threshold)
 
