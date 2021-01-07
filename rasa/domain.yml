@@ -24,6 +24,7 @@ slots:
     - reglamento general de estudios
     - ley organica
     - reglamento de titulación
+    - reglamento interno
   nivel_estructural:
     type: categorical
     influence_conversation: false
