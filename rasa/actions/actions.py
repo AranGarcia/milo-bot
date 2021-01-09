@@ -1,3 +1,4 @@
+from datetime import datetime
 from difflib import SequenceMatcher
 from typing import Any, Dict, List, Text
 
@@ -50,6 +51,30 @@ def format_title(title: str) -> str:
 def sd_html(doc_name, level, enumeration, text):
     """Format document text with HTML."""
     return f"<b>{level} {enumeration} del {doc_name}</b>. {text}"
+
+
+class ActionGreet(Action):
+
+    def name(self):
+        return "action_saludar"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+        dt = datetime.now()
+        if 12 > dt.hour >= 6:
+            text = "¡Hola! Buenos dias. &#129302;"
+        elif dt.hour < 19:
+            text = "Hola, espero que estés teniendo buena tarde. &#128515; ¿En qué te puedo ayudar?"
+        else:
+            text = "Buenas noches. &#129393; ¿Qué puedo hacer por ti?"
+
+        dispatcher.utter_message(text=text)
+
+        return []
 
 
 class ActionExtractArticle(Action):
@@ -131,7 +156,9 @@ class ActionSimilaritySearch(Action):
 
         concept_words = f"<u>{'</u> <u>'.join(query_text.split())}</u>"
         if not query_text:
-            message_text = f"No comprend&iacute; lo que deseas buscar. ¿Podrias aclararlo mejor? &#129300;"
+            message_text = (
+                "No comprend&iacute; lo que deseas buscar. ¿Podrias aclararlo mejor? &#129300;"
+            )
         elif not arts:
             message_text = f"No se encontraron art&iacute;culos con los conceptos {concept_words}"
         else:

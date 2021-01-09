@@ -4,7 +4,7 @@ stories:
 - story: Saludar
   steps:
     - intent: saludar
-    - action: utter_saludar
+    - action: action_saludar
 
 - story: Despedir
   steps:

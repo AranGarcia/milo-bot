@@ -24,6 +24,10 @@ COPY rasa/actions /app/actions
 COPY docs /app/docs
 COPY lib /app/lib
 
+# Change time zone
+ENV TZ=America/Mexico_City
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # By best practices, don't run the code with root user
 USER 1001
 
