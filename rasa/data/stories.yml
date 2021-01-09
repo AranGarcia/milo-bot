@@ -3,21 +3,21 @@ version: "2.0"
 stories:
 - story: Saludar
   steps:
-    - intent: greet
-    - action: utter_greet
+    - intent: saludar
+    - action: utter_saludar
 
 - story: Despedir
   steps:
-    - intent: goodbye
-    - action: utter_goodbye
+    - intent: despedir
+    - action: utter_despedir
 
 - story: Extraer artículo
   steps:
-  - intent: extract_article
-  - action: action_extract_article
+  - intent: extraer_articulo
+  - action: action_extraer_articulo
   - action: action_reset_slots
 
 - story: Realizar búsqueda de conceptos similares
   steps:
-  - intent: similarity_search
-  - action: action_similarity_search
+  - intent: busqueda_conceptos
+  - action: action_busqueda_conceptos

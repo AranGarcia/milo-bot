@@ -3,12 +3,12 @@ version: "2.0"
 rules:
 - rule: Realizar búsqueda de conceptos similares
   steps:
-  - intent: similarity_search
-  - action: action_similarity_search
-# - rule: Say goodbye anytime the user says goodbye
+  - intent: busqueda_conceptos
+  - action: action_busqueda_conceptos
+# - rule: Say despedir anytime the user says despedir
 #   steps:
-#   - intent: goodbye
-#   - action: utter_goodbye
+#   - intent: despedir
+#   - action: utter_despedir
 
 # - rule: Say 'I am a bot' anytime the user challenges
 #   steps:

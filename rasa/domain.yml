@@ -1,15 +1,15 @@
 version: "2.0"
 
 actions:
-  - action_extract_article
-  - action_similarity_search
+  - action_extraer_articulo
+  - action_busqueda_conceptos
   - action_reset_slots
 
 intents:
-  - greet
-  - extract_article
-  - similarity_search
-  - goodbye
+  - saludar
+  - extraer_articulo
+  - busqueda_conceptos
+  - despedir
 
 entities:
   - documento
@@ -38,16 +38,16 @@ slots:
     influence_conversation: false
 
 responses:
-  utter_greet:
+  utter_saludar:
   - text: "¡Hola! ¿En qué puedo ayudarte?"
 
   utter_ok:
   - text: "Entendido."
 
-  utter_goodbye:
+  utter_despedir:
   - text: "Adios."
 
-  utter_similarity_search_result:
+  utter_busqueda_conceptos_result:
   - text: "Iniciaré una búsqueda de tu consulta."
 
 session_config:

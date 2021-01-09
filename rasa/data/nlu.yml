@@ -8,7 +8,7 @@ nlu:
     - reglamento de titulacion profesional
     - ley organica
 
-- intent: greet
+- intent: saludar
   examples: |
     - hola
     - hey
@@ -17,16 +17,16 @@ nlu:
     - que onda
     - quibole
 
-- intent: goodbye
+- intent: despedir
   examples: |
     - adios
     - bye
-    - goodbye
+    - despedir
     - hasta luego
     - hasta pronto
     - nos vemos
 
-- intent: extract_article
+- intent: extraer_articulo
   examples: |
     - [titulo](nivel_estructural) [1](nivel) del [reglamento de titulacion](documento)
     - [titulo](nivel_estructural) [2](nivel) de la [ley orgánica](documento)
@@ -45,7 +45,7 @@ nlu:
     - [articulo](nivel_estructural) [40](nivel) de la [reglamento de titulacion profesional](documento)
     - [articulo](nivel_estructural) [2](nivel) del [ley organica](documento)
 
-- intent: similarity_search
+- intent: busqueda_conceptos
   examples: |
     - que articulos hablan acerca de esto
     - en que partes se mencionan acerca de otra cosa

@@ -6,8 +6,8 @@
 #   steps:
 #   - user: |
 #       hello there!
-#     intent: greet
-#   - action: utter_greet
+#     intent: saludar
+#   - action: utter_saludar
 #   - user: |
 #       amazing
 #     intent: mood_great
@@ -17,23 +17,23 @@
 #   steps:
 #   - user: |
 #       hello there!
-#     intent: greet
-#   - action: utter_greet
+#     intent: saludar
+#   - action: utter_saludar
 #   - user: |
 #       amazing
 #     intent: mood_great
 #   - action: utter_happy
 #   - user: |
 #       bye-bye!
-#     intent: goodbye
-#   - action: utter_goodbye
+#     intent: despedir
+#   - action: utter_despedir
 
 # - story: sad path 1
 #   steps:
 #   - user: |
 #       hello
-#     intent: greet
-#   - action: utter_greet
+#     intent: saludar
+#   - action: utter_saludar
 #   - user: |
 #       not good
 #     intent: mood_unhappy
@@ -48,8 +48,8 @@
 #   steps:
 #   - user: |
 #       hello
-#     intent: greet
-#   - action: utter_greet
+#     intent: saludar
+#   - action: utter_saludar
 #   - user: |
 #       not good
 #     intent: mood_unhappy
@@ -58,14 +58,14 @@
 #   - user: |
 #       not really
 #     intent: deny
-#   - action: utter_goodbye
+#   - action: utter_despedir
 
 # - story: sad path 3
 #   steps:
 #   - user: |
 #       hi
-#     intent: greet
-#   - action: utter_greet
+#     intent: saludar
+#   - action: utter_saludar
 #   - user: |
 #       very terrible
 #     intent: mood_unhappy
@@ -74,14 +74,14 @@
 #   - user: |
 #       no
 #     intent: deny
-#   - action: utter_goodbye
+#   - action: utter_despedir
 
-# - story: say goodbye
+# - story: say despedir
 #   steps:
 #   - user: |
 #       bye-bye!
-#     intent: goodbye
-#   - action: utter_goodbye
+#     intent: despedir
+#   - action: utter_despedir
 
 # - story: bot challenge
 #   steps:

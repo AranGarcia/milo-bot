@@ -54,7 +54,7 @@ def sd_html(doc_name, level, enumeration, text):
 
 class ActionExtractArticle(Action):
     def name(self) -> Text:
-        return "action_extract_article"
+        return "action_extraer_articulo"
 
     def run(
         self,
@@ -114,7 +114,7 @@ class ActionSimilaritySearch(Action):
     }
 
     def name(self) -> Text:
-        return "action_similarity_search"
+        return "action_busqueda_conceptos"
 
     def run(
         self,
