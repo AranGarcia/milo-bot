@@ -1,55 +1,67 @@
 version: "2.0"
 
 nlu:
-- lookup: documento
-  examples: |
-    - reglamento interno
-    - reglamento general de estudios
-    - reglamento de titulacion profesional
-    - ley organica
+  - lookup: documento
+    examples: |
+      - reglamento interno
+      - reglamento general de estudios
+      - reglamento de titulacion profesional
+      - ley organica
 
-- intent: saludar
-  examples: |
-    - hola
-    - hey
-    - buenos dias
-    - buenas tardes
-    - que onda
-    - quibole
+  - lookup: nivel_estructural
+    examples: |
+      - titulo
+      - capitulo
+      - seccion
+      - articulo
 
-- intent: despedir
-  examples: |
-    - adios
-    - bye
-    - despedir
-    - hasta luego
-    - hasta pronto
-    - nos vemos
+  - regex: nivel
+    examples: |
+      - [0-9]
 
-- intent: extraer_articulo
-  examples: |
-    - [titulo](nivel_estructural) [1](nivel) del [reglamento de titulacion](documento)
-    - [titulo](nivel_estructural) [2](nivel) de la [ley orgánica](documento)
-    - [titulo](nivel_estructural) [3](nivel) del [reglamento interno](documento)
-    - [titulo](nivel_estructural) [4](nivel) del [reglamento general de estudios](documento)
-    - [capitulo](nivel_estructural) [1](nivel) del [reglamento de titulación](documento)
-    - [capítulo](nivel_estructural) [2](nivel) de la [ley orgánica](documento)
-    - [capítulo](nivel_estructural) [3](nivel) del [reglamento interno](documento)
-    - [capítulo](nivel_estructural) [4](nivel) del [reglamento general de estudios](documento)
-    - [sección](nivel_estructural) [1](nivel) del [reglamento de titulación](documento)
-    - [sección](nivel_estructural) [2](nivel) de la [ley orgánica](documento)
-    - [sección](nivel_estructural) [3](nivel) del [reglamento interno](documento)
-    - [sección](nivel_estructural) [4](nivel) del [reglamento general de estudios](documento)
-    - [articulo](nivel_estructural) [123](nivel) del [reglamento interno](documento)
-    - [articulo](nivel_estructural) [1](nivel) del [reglamento general de estudios](documento)
-    - [articulo](nivel_estructural) [40](nivel) de la [reglamento de titulacion profesional](documento)
-    - [articulo](nivel_estructural) [2](nivel) del [ley organica](documento)
+  - intent: saludar
+    examples: |
+      - hola
+      - hey
+      - buenos dias
+      - buenas tardes
+      - que onda
+      - quibole
 
-- intent: busqueda_conceptos
-  examples: |
-    - que articulos hablan acerca de esto
-    - en que partes se mencionan acerca de otra cosa
+  - intent: despedir
+    examples: |
+      - adios
+      - bye
+      - despedir
+      - hasta luego
+      - hasta pronto
+      - nos vemos
+      - eso es todo
 
-- regex: articulo
-  examples: |
-    - [0-9]
+  - intent: extraer_articulo
+    examples: |
+      - [titulo](nivel_estructural) [1](nivel) del [reglamento de titulacion](documento)
+      - [titulo](nivel_estructural) [2](nivel) de la [ley orgánica](documento)
+      - [titulo](nivel_estructural) [3](nivel) del [reglamento interno](documento)
+      - [titulo](nivel_estructural) [4](nivel) del [reglamento general de estudios](documento)
+      - [capitulo](nivel_estructural) [1](nivel) del [reglamento de titulación](documento)
+      - [capítulo](nivel_estructural) [2](nivel) de la [ley orgánica](documento)
+      - [capítulo](nivel_estructural) [3](nivel) del [reglamento interno](documento)
+      - [capítulo](nivel_estructural) [4](nivel) del [reglamento general de estudios](documento)
+      - [sección](nivel_estructural) [1](nivel) del [reglamento de titulación](documento)
+      - [sección](nivel_estructural) [2](nivel) de la [ley orgánica](documento)
+      - [sección](nivel_estructural) [3](nivel) del [reglamento interno](documento)
+      - [sección](nivel_estructural) [4](nivel) del [reglamento general de estudios](documento)
+      - [articulo](nivel_estructural) [123](nivel) del [reglamento interno](documento)
+      - [articulo](nivel_estructural) [1](nivel) del [reglamento general de estudios](documento)
+      - [articulo](nivel_estructural) [40](nivel) de la [reglamento de titulacion profesional](documento)
+      - [articulo](nivel_estructural) [2](nivel) del [ley organica](documento)
+      - dime el contenido del [articulo](nivel_estructural) [2](nivel) del [ley organica](documento)
+
+  - intent: busqueda_conceptos
+    examples: |
+      - que articulos hablan acerca de esto
+      - en que partes se mencionan acerca de otra cosa
+      - qué pasaría en el supuesto caso que sucediera esto
+      - muestrame articulos que hablen acerca de algo
+      - en donde se mencionan articulos sobre esta cosa.
