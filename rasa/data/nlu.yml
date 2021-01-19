@@ -57,6 +57,7 @@ nlu:
       - [articulo](nivel_estructural) [40](nivel) de la [reglamento de titulacion profesional](documento)
       - [articulo](nivel_estructural) [2](nivel) del [ley organica](documento)
       - dime el contenido del [articulo](nivel_estructural) [2](nivel) del [ley organica](documento)
+      - que dice el [articulo](nivel_estructural) [2](nivel) del [ley organica](documento)
 
   - intent: busqueda_conceptos
     examples: |

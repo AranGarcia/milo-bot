@@ -61,3 +61,4 @@ Se podría preguntar las siguientes consultas al bot.
 - ¿Que reglamentos hablan sobre la movilidad academica?
 - ¿Que pasa si tengo inconformidades?
 - ¿Que pasa si estoy en situación irregular?
+- Que reglamentos hablan sobre cometer un acto violento

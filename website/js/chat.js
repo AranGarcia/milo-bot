@@ -38,7 +38,9 @@ async function healthcheck() {
         URL,
     ).then(function (response) {
         if (response.status == 200) {
-            createContainer("Dime, ¿en qué puedo ayudarte?", true);
+            createContainer("Puedo <b>extraer reglamentos si me dices algo como</b><br><i>Qu&eacute; dice el art&iacute;culo 3 del reglamento general de estudios<i>", true)
+            sleep(700)
+            createContainer("O tambi&eacute;n puedo <b>reglamentos relacionados a conceptos</b> que me digas si me dices algo como:<br>¿Qu&eacute; reglamentos hablan sobre la responsabilidad?", true);
         } else {
             createContainer("Me gustaría ayudarte, pero no me siento bien. &#129298;"), true;
         }

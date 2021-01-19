@@ -125,15 +125,18 @@ class ActionExtractArticle(Action):
 
 class ActionSimilaritySearch(Action):
     QUERY_WORDS = {
+        "a",
         "acercar",
         "artículo",
         "articulo",
         "articulos",
         "acercar",
+        "encontrar",
         "mencionar",
         "partir",
         "paso",
         "pasar",
+        "pasaria",
         "reglamento",
         "querer",
     }
@@ -167,13 +170,13 @@ class ActionSimilaritySearch(Action):
                 results.append(sd_html(format_title(a[0]), a[1].capitalize(), a[2], ""))
 
             ftext = "<br>".join(results)
-            message_text = f"Busqueda realizada con los conceptos <i>{concept_words}<i><br>{ftext}"
+            message_text = f"Te podr&iacute;an interesar los siguientes art&iacute;culos<br>relacionado a los conceptos <i>{concept_words}<i><br>{ftext}"
 
         dispatcher.utter_message(text=message_text)
         return []
 
     @classmethod
-    def __fetch_articles(cls, text: str, threshold: float = 0.8) -> List[str]:
+    def __fetch_articles(cls, text: str, threshold: float = 0.7) -> List[str]:
         """Fetches similar articles using concepts from `text`."""
         _, sd_ids = nlputils.WordSpace.search(text, threshold=threshold)
 
